@@ -50,6 +50,10 @@ async function loadImages() {
       img.src = pkg.path;
       img.onload = () => {
         try {
+          // Set explicit dimensions so SVGs with only a viewBox render at the
+          // right size rather than the browser default of 300×150.
+          img.width = bmpW;
+          img.height = bmpH;
           const oc = new OffscreenCanvas(bmpW, bmpH);
           oc.getContext('2d').drawImage(img, 0, 0, bmpW, bmpH);
           createImageBitmap(oc).then(resolve).catch(() => resolve(img));
@@ -262,7 +266,7 @@ canvas.addEventListener('pointerup', e => {
     const cell = cellAtPoint(e.clientX, e.clientY);
     if (cell) {
       const pkg = packages[imageIndexForCell(cell.col, cell.row)];
-      window.open(pkg.url, '_blank', 'noopener');
+      openPanel(pkg.url);
     }
   }
 });
@@ -285,4 +289,34 @@ window.addEventListener('resize', resize);
 
 // --- Init ---
 
-loadImages().then(() => resize());
+const loadingEl = document.getElementById('loading');
+
+loadImages().then(() => {
+  resize();
+  loadingEl.classList.add('hidden');
+  loadingEl.addEventListener('transitionend', () => loadingEl.remove(), { once: true });
+});
+
+// --- Panel ---
+
+const panel = document.getElementById('panel');
+const panelFrame = document.getElementById('panel-frame');
+const panelClose = document.getElementById('panel-close');
+const panelExternal = document.getElementById('panel-external');
+
+function openPanel(url) {
+  panelFrame.src = url;
+  panelExternal.href = url;
+  panel.classList.add('open');
+}
+
+function closePanel() {
+  panel.classList.remove('open');
+  panelFrame.src = '';
+}
+
+panelClose.addEventListener('click', closePanel);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePanel();
+});

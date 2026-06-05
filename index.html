@@ -4,10 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hex Grid</title>
+  <link rel="icon" type="image/svg+xml" href="images/tidyverse.svg" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading stickers…</div>
+  </div>
+
   <canvas id="grid"></canvas>
+
+  <div id="panel" class="panel">
+    <div class="panel-header">
+      <button id="panel-close" class="panel-close" aria-label="Close">&#x2715;</button>
+      <a id="panel-external" class="panel-external" target="_blank" rel="noopener" title="Open in new tab">&#x2197;</a>
+    </div>
+    <iframe id="panel-frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  </div>
+
   <script src="packages.js"></script>
   <script src="main.js"></script>
 </body>

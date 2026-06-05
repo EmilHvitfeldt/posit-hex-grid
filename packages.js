@@ -98,7 +98,7 @@ const PACKAGES = [
   {
     "name": "connections",
     "path": "images/connections.svg",
-    "url": "https://github.com/rstudio/connections"
+    "url": "https://rstudio.github.io/connections/"
   },
   {
     "name": "corrr",
@@ -123,7 +123,7 @@ const PACKAGES = [
   {
     "name": "debrief",
     "path": "images/debrief.svg",
-    "url": "https://cran.r-project.org/package=debrief"
+    "url": "https://r-lib.github.io/debrief/"
   },
   {
     "name": "devtools",
@@ -183,7 +183,7 @@ const PACKAGES = [
   {
     "name": "feather",
     "path": "images/feather.svg",
-    "url": "https://cran.r-project.org/package=feather"
+    "url": "https://github.com/wesm/feather"
   },
   {
     "name": "filtro",
@@ -403,7 +403,7 @@ const PACKAGES = [
   {
     "name": "plumber2",
     "path": "images/plumber2.svg",
-    "url": "https://cran.r-project.org/package=plumber2"
+    "url": "https://plumber2.posit.co/"
   },
   {
     "name": "plumbertableau",
@@ -458,7 +458,7 @@ const PACKAGES = [
   {
     "name": "rapp",
     "path": "images/rapp.svg",
-    "url": "https://cran.r-project.org/package=rapp"
+    "url": "https://github.com/r-lib/Rapp"
   },
   {
     "name": "reactlog",
@@ -518,7 +518,7 @@ const PACKAGES = [
   {
     "name": "rrd",
     "path": "images/rrd.svg",
-    "url": "https://cran.r-project.org/package=rrd"
+    "url": "https://andrie.github.io/rrd/"
   },
   {
     "name": "rsample",
@@ -602,7 +602,7 @@ const PACKAGES = [
   },
   {
     "name": "sparsevctrs",
-    "path": "images/sparsevctrs.svg",
+    "path": "images/sparsevctrs.png",
     "url": "https://r-lib.github.io/sparsevctrs/"
   },
   {
@@ -613,7 +613,7 @@ const PACKAGES = [
   {
     "name": "sss",
     "path": "images/sss.svg",
-    "url": "https://cran.r-project.org/package=sss"
+    "url": "https://andrie.github.io/sss/"
   },
   {
     "name": "stacks",
