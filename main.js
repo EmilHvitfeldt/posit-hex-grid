@@ -35,36 +35,33 @@ let hoverAnimRaf = null;
 
 // --- Image loading ---
 
-// Pre-rasterize each SVG to an ImageBitmap at draw size so drawImage never
-// has to re-rasterize SVG markup on every frame.
-// Must go via OffscreenCanvas first — createImageBitmap rejects SVGs that
-// have only a viewBox and no explicit width/height attributes.
+// Stickers are pre-rasterized to draw size by generate.js, so loading is just
+// a decode. Downsampling to the exact bitmap size here still helps: it keeps
+// drawImage on a 1:1 blit and shrinks what we hold in memory.
 async function loadImages() {
   const dpr = window.devicePixelRatio || 1;
   const r = R - GAP;
   const bmpW = Math.round(r * Math.sqrt(3) * dpr);
   const bmpH = Math.round(r * 2 * dpr);
-  const loaded = await Promise.all(
+  // Load via <img> rather than fetch so the page still works when opened
+  // straight off disk — fetch refuses file:// URLs.
+  images = await Promise.all(
     packages.map(pkg => new Promise(resolve => {
       const img = new Image();
-      img.src = pkg.path;
       img.onload = () => {
-        try {
-          // Set explicit dimensions so SVGs with only a viewBox render at the
-          // right size rather than the browser default of 300×150.
-          img.width = bmpW;
-          img.height = bmpH;
-          const oc = new OffscreenCanvas(bmpW, bmpH);
-          oc.getContext('2d').drawImage(img, 0, 0, bmpW, bmpH);
-          createImageBitmap(oc).then(resolve).catch(() => resolve(img));
-        } catch {
-          resolve(img);
-        }
+        createImageBitmap(img, {
+          resizeWidth: bmpW,
+          resizeHeight: bmpH,
+          resizeQuality: 'high',
+        })
+          // On file:// the image counts as cross-origin, so it can't be turned
+          // into a bitmap. Hand back the element and let drawImage scale it.
+          .then(resolve, () => resolve(img));
       };
       img.onerror = () => resolve(null);
+      img.src = pkg.path;
     }))
   );
-  images = loaded.filter(Boolean);
 }
 
 // --- Deterministic image assignment ---
@@ -119,6 +116,7 @@ function cellAtPoint(mx, my) {
 const SQRT3 = Math.sqrt(3);
 
 function drawHex(cx, cy, img, scale) {
+  if (!img) return; // sticker failed to load; leave the cell empty
   const r = R - GAP;
   ctx.save();
   if (scale !== 1.0) {
