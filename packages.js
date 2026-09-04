@@ -2,742 +2,822 @@
 const PACKAGES = [
   {
     "name": "R6",
-    "path": "images/R6.svg",
+    "path": "images/R6.webp",
     "url": "https://r6.r-lib.org"
   },
   {
     "name": "RStudio",
-    "path": "images/RStudio.svg",
+    "path": "images/RStudio.webp",
     "url": "https://posit.co/products/open-source/rstudio/"
   },
   {
     "name": "agua",
-    "path": "images/agua.svg",
+    "path": "images/agua.webp",
     "url": "https://agua.tidymodels.org"
   },
   {
     "name": "air",
-    "path": "images/air.svg",
+    "path": "images/air.webp",
     "url": "https://posit-dev.github.io/air/"
   },
   {
     "name": "applicable",
-    "path": "images/applicable.svg",
+    "path": "images/applicable.webp",
     "url": "https://applicable.tidymodels.org"
   },
   {
     "name": "ark",
-    "path": "images/ark.svg",
+    "path": "images/ark.webp",
     "url": "https://github.com/posit-dev/ark"
   },
   {
     "name": "baguette",
-    "path": "images/baguette.svg",
+    "path": "images/baguette.webp",
     "url": "https://baguette.tidymodels.org"
   },
   {
     "name": "blastula",
-    "path": "images/blastula.svg",
+    "path": "images/blastula.webp",
     "url": "https://rstudio.github.io/blastula/"
   },
   {
     "name": "blogdown",
-    "path": "images/blogdown.svg",
+    "path": "images/blogdown.webp",
     "url": "https://rstudio.github.io/blogdown/"
   },
   {
     "name": "bonsai",
-    "path": "images/bonsai.svg",
+    "path": "images/bonsai.webp",
     "url": "https://bonsai.tidymodels.org"
   },
   {
     "name": "bookdown",
-    "path": "images/bookdown.svg",
+    "path": "images/bookdown.webp",
     "url": "https://rstudio.github.io/bookdown/"
   },
   {
     "name": "broom",
-    "path": "images/broom.svg",
+    "path": "images/broom.webp",
     "url": "https://broom.tidyverse.org"
   },
   {
+    "name": "brulee",
+    "path": "images/brulee.webp",
+    "url": "https://brulee.tidymodels.org"
+  },
+  {
     "name": "bslib",
-    "path": "images/bslib.svg",
+    "path": "images/bslib.webp",
     "url": "https://rstudio.github.io/bslib/"
   },
   {
+    "name": "btw",
+    "path": "images/btw.webp",
+    "url": "https://posit-dev.github.io/btw"
+  },
+  {
     "name": "butcher",
-    "path": "images/butcher.svg",
+    "path": "images/butcher.webp",
     "url": "https://butcher.tidymodels.org"
   },
   {
     "name": "censored",
-    "path": "images/censored.svg",
+    "path": "images/censored.webp",
     "url": "https://censored.tidymodels.org"
   },
   {
+    "name": "chatlas",
+    "path": "images/chatlas.webp",
+    "url": "https://posit-dev.github.io/chatlas/"
+  },
+  {
     "name": "chattr",
-    "path": "images/chattr.svg",
+    "path": "images/chattr.webp",
     "url": "https://mlverse.github.io/chattr/"
   },
   {
     "name": "chromote",
-    "path": "images/chromote.svg",
+    "path": "images/chromote.webp",
     "url": "https://rstudio.github.io/chromote/"
   },
   {
     "name": "clock",
-    "path": "images/clock.svg",
+    "path": "images/clock.webp",
     "url": "https://clock.r-lib.org"
   },
   {
     "name": "connectapi",
-    "path": "images/connectapi.svg",
+    "path": "images/connectapi.webp",
     "url": "https://pkgs.rstudio.com/connectapi/"
   },
   {
     "name": "connections",
-    "path": "images/connections.svg",
+    "path": "images/connections.webp",
     "url": "https://rstudio.github.io/connections/"
   },
   {
     "name": "corrr",
-    "path": "images/corrr.svg",
+    "path": "images/corrr.webp",
     "url": "https://corrr.tidymodels.org"
   },
   {
     "name": "covr",
-    "path": "images/covr.svg",
+    "path": "images/covr.webp",
     "url": "https://covr.r-lib.org"
   },
   {
     "name": "dbplot",
-    "path": "images/dbplot.svg",
+    "path": "images/dbplot.webp",
     "url": "https://edgararuiz.github.io/dbplot/"
   },
   {
     "name": "dbplyr",
-    "path": "images/dbplyr.svg",
+    "path": "images/dbplyr.webp",
     "url": "https://dbplyr.tidyverse.org"
   },
   {
     "name": "debrief",
-    "path": "images/debrief.svg",
+    "path": "images/debrief.webp",
     "url": "https://r-lib.github.io/debrief/"
   },
   {
     "name": "devtools",
-    "path": "images/devtools.svg",
+    "path": "images/devtools.webp",
     "url": "https://devtools.r-lib.org"
   },
   {
     "name": "dials",
-    "path": "images/dials.svg",
+    "path": "images/dials.webp",
     "url": "https://dials.tidymodels.org"
   },
   {
     "name": "discrim",
-    "path": "images/discrim.svg",
+    "path": "images/discrim.webp",
     "url": "https://discrim.tidymodels.org"
   },
   {
     "name": "distill",
-    "path": "images/distill.svg",
+    "path": "images/distill.webp",
     "url": "https://rstudio.github.io/distill/"
   },
   {
     "name": "dplyr",
-    "path": "images/dplyr.svg",
+    "path": "images/dplyr.webp",
     "url": "https://dplyr.tidyverse.org"
   },
   {
     "name": "dsbox",
-    "path": "images/dsbox.svg",
+    "path": "images/dsbox.webp",
     "url": "https://datasciencebox.org"
   },
   {
     "name": "dtplyr",
-    "path": "images/dtplyr.svg",
+    "path": "images/dtplyr.webp",
     "url": "https://dtplyr.tidyverse.org"
   },
   {
     "name": "duckplyr",
-    "path": "images/duckplyr.svg",
+    "path": "images/duckplyr.webp",
     "url": "https://duckplyr.tidyverse.org"
   },
   {
     "name": "ellmer",
-    "path": "images/ellmer.svg",
+    "path": "images/ellmer.webp",
     "url": "https://ellmer.tidyverse.org"
   },
   {
     "name": "embed",
-    "path": "images/embed.svg",
+    "path": "images/embed.webp",
     "url": "https://embed.tidymodels.org"
   },
   {
     "name": "farver",
-    "path": "images/farver.svg",
+    "path": "images/farver.webp",
     "url": "https://farver.data-imaginist.com"
   },
   {
     "name": "feather",
-    "path": "images/feather.svg",
+    "path": "images/feather.webp",
     "url": "https://github.com/wesm/feather"
   },
   {
     "name": "filtro",
-    "path": "images/filtro.svg",
+    "path": "images/filtro.webp",
     "url": "https://filtro.tidymodels.org"
   },
   {
     "name": "finetune",
-    "path": "images/finetune.svg",
+    "path": "images/finetune.webp",
     "url": "https://finetune.tidymodels.org"
   },
   {
     "name": "flexdashboard",
-    "path": "images/flexdashboard.svg",
+    "path": "images/flexdashboard.webp",
     "url": "https://rstudio.github.io/flexdashboard/"
   },
   {
     "name": "forcats",
-    "path": "images/forcats.svg",
+    "path": "images/forcats.webp",
     "url": "https://forcats.tidyverse.org"
   },
   {
     "name": "fs",
-    "path": "images/fs.svg",
+    "path": "images/fs.webp",
     "url": "https://fs.r-lib.org"
   },
   {
     "name": "furrr",
-    "path": "images/furrr.svg",
+    "path": "images/furrr.webp",
     "url": "https://furrr.futureverse.org"
   },
   {
     "name": "gganimate",
-    "path": "images/gganimate.svg",
+    "path": "images/gganimate.webp",
     "url": "https://gganimate.com"
   },
   {
     "name": "ggplot2",
-    "path": "images/ggplot2.svg",
+    "path": "images/ggplot2.webp",
     "url": "https://ggplot2.tidyverse.org"
   },
   {
+    "name": "ggsql",
+    "path": "images/ggsql.webp",
+    "url": "https://r.ggsql.org"
+  },
+  {
     "name": "glue",
-    "path": "images/glue.svg",
+    "path": "images/glue.webp",
     "url": "https://glue.tidyverse.org"
   },
   {
     "name": "googledrive",
-    "path": "images/googledrive.svg",
+    "path": "images/googledrive.webp",
     "url": "https://googledrive.tidyverse.org"
   },
   {
     "name": "googlesheets",
-    "path": "images/googlesheets.svg",
+    "path": "images/googlesheets.webp",
     "url": "https://github.com/jennybc/googlesheets"
   },
   {
     "name": "googlesheets4",
-    "path": "images/googlesheets4.svg",
+    "path": "images/googlesheets4.webp",
     "url": "https://googlesheets4.tidyverse.org"
   },
   {
     "name": "great_tables",
-    "path": "images/great_tables.svg",
+    "path": "images/great_tables.webp",
     "url": "https://posit-dev.github.io/great-tables/"
   },
   {
     "name": "gt",
-    "path": "images/gt.svg",
+    "path": "images/gt.webp",
     "url": "https://gt.rstudio.com"
   },
   {
     "name": "gtable",
-    "path": "images/gtable.svg",
+    "path": "images/gtable.webp",
     "url": "https://gtable.r-lib.org"
   },
   {
     "name": "hardhat",
-    "path": "images/hardhat.svg",
+    "path": "images/hardhat.webp",
     "url": "https://hardhat.tidymodels.org"
   },
   {
     "name": "haven",
-    "path": "images/haven.svg",
+    "path": "images/haven.webp",
     "url": "https://haven.tidyverse.org"
   },
   {
     "name": "hms",
-    "path": "images/hms.svg",
+    "path": "images/hms.webp",
     "url": "https://hms.tidyverse.org"
   },
   {
     "name": "htmltools",
-    "path": "images/htmltools.svg",
+    "path": "images/htmltools.webp",
     "url": "https://rstudio.github.io/htmltools/"
   },
   {
     "name": "httr2",
-    "path": "images/httr2.svg",
+    "path": "images/httr2.webp",
     "url": "https://httr2.r-lib.org"
   },
   {
+    "name": "important",
+    "path": "images/important.webp",
+    "url": "https://important.tidymodels.org"
+  },
+  {
     "name": "infer",
-    "path": "images/infer.svg",
+    "path": "images/infer.webp",
     "url": "https://infer.tidymodels.org"
   },
   {
     "name": "keras3",
-    "path": "images/keras3.svg",
+    "path": "images/keras3.webp",
     "url": "https://keras.posit.co"
   },
   {
     "name": "knitr",
-    "path": "images/knitr.svg",
+    "path": "images/knitr.webp",
     "url": "https://yihui.org/knitr/"
   },
   {
     "name": "lintr",
-    "path": "images/lintr.svg",
+    "path": "images/lintr.webp",
     "url": "https://lintr.r-lib.org"
   },
   {
     "name": "lobstr",
-    "path": "images/lobstr.svg",
+    "path": "images/lobstr.webp",
     "url": "https://lobstr.r-lib.org"
   },
   {
+    "name": "lorax",
+    "path": "images/lorax.webp",
+    "url": "https://github.com/tidymodels/lorax"
+  },
+  {
     "name": "lubridate",
-    "path": "images/lubridate.svg",
+    "path": "images/lubridate.webp",
     "url": "https://lubridate.tidyverse.org"
   },
   {
     "name": "luz",
-    "path": "images/luz.svg",
+    "path": "images/luz.webp",
     "url": "https://mlverse.github.io/luz/"
   },
   {
     "name": "mall",
-    "path": "images/mall.svg",
+    "path": "images/mall.webp",
     "url": "https://mlverse.github.io/mall/"
   },
   {
     "name": "marquee",
-    "path": "images/marquee.svg",
+    "path": "images/marquee.webp",
     "url": "https://marquee.r-lib.org"
   },
   {
     "name": "miniCRAN",
-    "path": "images/miniCRAN.svg",
+    "path": "images/miniCRAN.webp",
     "url": "https://andrie.github.io/miniCRAN/"
   },
   {
+    "name": "mirai",
+    "path": "images/mirai.webp",
+    "url": "https://mirai.r-lib.org"
+  },
+  {
     "name": "modeldb",
-    "path": "images/modeldb.svg",
+    "path": "images/modeldb.webp",
     "url": "https://tidymodels.github.io/modeldb/"
   },
   {
     "name": "modelr",
-    "path": "images/modelr.svg",
+    "path": "images/modelr.webp",
     "url": "https://modelr.tidyverse.org"
   },
   {
     "name": "multilevelmod",
-    "path": "images/multilevelmod.svg",
+    "path": "images/multilevelmod.webp",
     "url": "https://multilevelmod.tidymodels.org"
   },
   {
     "name": "odbc",
-    "path": "images/odbc.svg",
+    "path": "images/odbc.webp",
     "url": "https://odbc.r-dbi.org"
   },
   {
     "name": "orbital",
-    "path": "images/orbital.svg",
+    "path": "images/orbital.webp",
     "url": "https://orbital.tidymodels.org"
   },
   {
     "name": "pagedown",
-    "path": "images/pagedown.svg",
+    "path": "images/pagedown.webp",
     "url": "https://pagedown.rbind.io"
   },
   {
     "name": "parsnip",
-    "path": "images/parsnip.svg",
+    "path": "images/parsnip.webp",
     "url": "https://parsnip.tidymodels.org"
   },
   {
     "name": "patchwork",
-    "path": "images/patchwork.svg",
+    "path": "images/patchwork.webp",
     "url": "https://patchwork.data-imaginist.com"
   },
   {
     "name": "pins",
-    "path": "images/pins.svg",
+    "path": "images/pins.webp",
     "url": "https://pins.rstudio.com"
   },
   {
     "name": "pipe",
-    "path": "images/pipe.svg",
+    "path": "images/pipe.webp",
     "url": "https://magrittr.tidyverse.org"
   },
   {
     "name": "pkgdown",
-    "path": "images/pkgdown.svg",
+    "path": "images/pkgdown.webp",
     "url": "https://pkgdown.r-lib.org"
   },
   {
     "name": "plotnine",
-    "path": "images/plotnine.svg",
+    "path": "images/plotnine.webp",
     "url": "https://plotnine.org"
   },
   {
+    "name": "plsmod",
+    "path": "images/plsmod.webp",
+    "url": "https://plsmod.tidymodels.org"
+  },
+  {
     "name": "plumber",
-    "path": "images/plumber.svg",
+    "path": "images/plumber.webp",
     "url": "https://www.rplumber.io"
   },
   {
     "name": "plumber2",
-    "path": "images/plumber2.svg",
+    "path": "images/plumber2.webp",
     "url": "https://plumber2.posit.co/"
   },
   {
     "name": "plumbertableau",
-    "path": "images/plumbertableau.svg",
+    "path": "images/plumbertableau.webp",
     "url": "https://rstudio.github.io/plumbertableau/"
   },
   {
     "name": "pointblank",
-    "path": "images/pointblank.svg",
+    "path": "images/pointblank.webp",
     "url": "https://rstudio.github.io/pointblank/"
   },
   {
     "name": "poissonreg",
-    "path": "images/poissonreg.svg",
+    "path": "images/poissonreg.webp",
     "url": "https://poissonreg.tidymodels.org"
   },
   {
     "name": "positron",
-    "path": "images/positron.svg",
+    "path": "images/positron.webp",
     "url": "https://positron.posit.co"
   },
   {
     "name": "probably",
-    "path": "images/probably.svg",
+    "path": "images/probably.webp",
     "url": "https://probably.tidymodels.org"
   },
   {
     "name": "promises",
-    "path": "images/promises.svg",
+    "path": "images/promises.webp",
     "url": "https://rstudio.github.io/promises/"
   },
   {
     "name": "purrr",
-    "path": "images/purrr.svg",
+    "path": "images/purrr.webp",
     "url": "https://purrr.tidyverse.org"
   },
   {
     "name": "quarto",
-    "path": "images/quarto.svg",
+    "path": "images/quarto.webp",
     "url": "https://quarto.org"
   },
   {
+    "name": "querychat",
+    "path": "images/querychat.webp",
+    "url": "https://posit-dev.github.io/querychat/r"
+  },
+  {
+    "name": "quickr",
+    "path": "images/quickr.webp",
+    "url": "https://github.com/t-kalinowski/quickr"
+  },
+  {
     "name": "r2d3",
-    "path": "images/r2d3.svg",
+    "path": "images/r2d3.webp",
     "url": "https://rstudio.github.io/r2d3/"
   },
   {
     "name": "ragg",
-    "path": "images/ragg.svg",
+    "path": "images/ragg.webp",
     "url": "https://ragg.r-lib.org"
   },
   {
+    "name": "raghilda",
+    "path": "images/raghilda.webp",
+    "url": "https://posit-dev.github.io/raghilda/"
+  },
+  {
+    "name": "ragnar",
+    "path": "images/ragnar.webp",
+    "url": "https://ragnar.tidyverse.org"
+  },
+  {
     "name": "rapp",
-    "path": "images/rapp.svg",
+    "path": "images/rapp.webp",
     "url": "https://github.com/r-lib/Rapp"
   },
   {
     "name": "reactlog",
-    "path": "images/reactlog.svg",
+    "path": "images/reactlog.webp",
     "url": "https://rstudio.github.io/reactlog/"
   },
   {
     "name": "readr",
-    "path": "images/readr.svg",
+    "path": "images/readr.webp",
     "url": "https://readr.tidyverse.org"
   },
   {
     "name": "readxl",
-    "path": "images/readxl.svg",
+    "path": "images/readxl.webp",
     "url": "https://readxl.tidyverse.org"
   },
   {
     "name": "recipes",
-    "path": "images/recipes.svg",
+    "path": "images/recipes.webp",
     "url": "https://recipes.tidymodels.org"
   },
   {
     "name": "renv",
-    "path": "images/renv.svg",
+    "path": "images/renv.webp",
     "url": "https://rstudio.github.io/renv/"
   },
   {
     "name": "reprex",
-    "path": "images/reprex.svg",
+    "path": "images/reprex.webp",
     "url": "https://reprex.tidyverse.org"
   },
   {
     "name": "reticulate",
-    "path": "images/reticulate.svg",
+    "path": "images/reticulate.webp",
     "url": "https://rstudio.github.io/reticulate/"
   },
   {
     "name": "rlang",
-    "path": "images/rlang.svg",
+    "path": "images/rlang.webp",
     "url": "https://rlang.r-lib.org"
   },
   {
     "name": "rmarkdown",
-    "path": "images/rmarkdown.svg",
+    "path": "images/rmarkdown.webp",
     "url": "https://rmarkdown.rstudio.com"
   },
   {
     "name": "roxygen2",
-    "path": "images/roxygen2.svg",
+    "path": "images/roxygen2.webp",
     "url": "https://roxygen2.r-lib.org"
   },
   {
     "name": "rray",
-    "path": "images/rray.svg",
+    "path": "images/rray.webp",
     "url": "https://rray.r-lib.org"
   },
   {
     "name": "rrd",
-    "path": "images/rrd.svg",
+    "path": "images/rrd.webp",
     "url": "https://andrie.github.io/rrd/"
   },
   {
     "name": "rsample",
-    "path": "images/rsample.svg",
+    "path": "images/rsample.webp",
     "url": "https://rsample.tidymodels.org"
   },
   {
     "name": "rsconnect",
-    "path": "images/rsconnect.svg",
+    "path": "images/rsconnect.webp",
     "url": "https://rstudio.github.io/rsconnect/"
   },
   {
     "name": "rstudioapi",
-    "path": "images/rstudioapi.svg",
+    "path": "images/rstudioapi.webp",
     "url": "https://rstudio.github.io/rstudioapi/"
   },
   {
     "name": "rticles",
-    "path": "images/rticles.svg",
+    "path": "images/rticles.webp",
     "url": "https://pkgs.rstudio.com/rticles/"
   },
   {
     "name": "rules",
-    "path": "images/rules.svg",
+    "path": "images/rules.webp",
     "url": "https://rules.tidymodels.org"
   },
   {
     "name": "rvest",
-    "path": "images/rvest.svg",
+    "path": "images/rvest.webp",
     "url": "https://rvest.tidyverse.org"
   },
   {
     "name": "rwasm",
-    "path": "images/rwasm.svg",
+    "path": "images/rwasm.webp",
     "url": "https://r-wasm.github.io/rwasm/"
   },
   {
     "name": "sass",
-    "path": "images/sass.svg",
+    "path": "images/sass.webp",
     "url": "https://rstudio.github.io/sass/"
   },
   {
     "name": "scales",
-    "path": "images/scales.svg",
+    "path": "images/scales.webp",
     "url": "https://scales.r-lib.org"
   },
   {
     "name": "shiny",
-    "path": "images/shiny.svg",
+    "path": "images/shiny.webp",
     "url": "https://shiny.posit.co"
   },
   {
     "name": "shinychat",
-    "path": "images/shinychat.svg",
+    "path": "images/shinychat.webp",
     "url": "https://posit-dev.github.io/shinychat/"
   },
   {
+    "name": "shinyreact",
+    "path": "images/shinyreact.webp",
+    "url": "https://github.com/posit-dev/shinyreact"
+  },
+  {
     "name": "shinytest2",
-    "path": "images/shinytest2.svg",
+    "path": "images/shinytest2.webp",
     "url": "https://rstudio.github.io/shinytest2/"
   },
   {
     "name": "siuba",
-    "path": "images/siuba.svg",
+    "path": "images/siuba.webp",
     "url": "https://siuba.org"
   },
   {
     "name": "sloop",
-    "path": "images/sloop.svg",
+    "path": "images/sloop.webp",
     "url": "https://sloop.r-lib.org"
   },
   {
     "name": "sortable",
-    "path": "images/sortable.svg",
+    "path": "images/sortable.webp",
     "url": "https://rstudio.github.io/sortable/"
   },
   {
     "name": "sparklyr",
-    "path": "images/sparklyr.svg",
+    "path": "images/sparklyr.webp",
     "url": "https://spark.rstudio.com"
   },
   {
     "name": "sparsevctrs",
-    "path": "images/sparsevctrs.png",
+    "path": "images/sparsevctrs.webp",
     "url": "https://r-lib.github.io/sparsevctrs/"
   },
   {
     "name": "spatialsample",
-    "path": "images/spatialsample.svg",
+    "path": "images/spatialsample.webp",
     "url": "https://spatialsample.tidymodels.org"
   },
   {
     "name": "sss",
-    "path": "images/sss.svg",
+    "path": "images/sss.webp",
     "url": "https://andrie.github.io/sss/"
   },
   {
     "name": "stacks",
-    "path": "images/stacks.svg",
+    "path": "images/stacks.webp",
     "url": "https://stacks.tidymodels.org"
   },
   {
     "name": "stringr",
-    "path": "images/stringr.svg",
+    "path": "images/stringr.webp",
     "url": "https://stringr.tidyverse.org"
   },
   {
     "name": "svglite",
-    "path": "images/svglite.svg",
+    "path": "images/svglite.webp",
     "url": "https://svglite.r-lib.org"
   },
   {
     "name": "systemfonts",
-    "path": "images/systemfonts.svg",
+    "path": "images/systemfonts.webp",
     "url": "https://systemfonts.r-lib.org"
   },
   {
+    "name": "tabby",
+    "path": "images/tabby.webp",
+    "url": "https://tabby.tidymodels.org"
+  },
+  {
     "name": "tensorflow",
-    "path": "images/tensorflow.svg",
+    "path": "images/tensorflow.webp",
     "url": "https://tensorflow.rstudio.com"
   },
   {
     "name": "testthat",
-    "path": "images/testthat.svg",
+    "path": "images/testthat.webp",
     "url": "https://testthat.r-lib.org"
   },
   {
     "name": "textrecipes",
-    "path": "images/textrecipes.svg",
+    "path": "images/textrecipes.webp",
     "url": "https://textrecipes.tidymodels.org"
   },
   {
     "name": "themis",
-    "path": "images/themis.svg",
+    "path": "images/themis.webp",
     "url": "https://themis.tidymodels.org"
   },
   {
     "name": "tibble",
-    "path": "images/tibble.svg",
+    "path": "images/tibble.webp",
     "url": "https://tibble.tidyverse.org"
   },
   {
     "name": "tidyclust",
-    "path": "images/tidyclust.svg",
+    "path": "images/tidyclust.webp",
     "url": "https://tidyclust.tidymodels.org"
   },
   {
     "name": "tidymodels",
-    "path": "images/tidymodels.svg",
+    "path": "images/tidymodels.webp",
     "url": "https://tidymodels.tidymodels.org"
   },
   {
     "name": "tidyposterior",
-    "path": "images/tidyposterior.svg",
+    "path": "images/tidyposterior.webp",
     "url": "https://tidyposterior.tidymodels.org"
   },
   {
     "name": "tidypredict",
-    "path": "images/tidypredict.svg",
+    "path": "images/tidypredict.webp",
     "url": "https://tidypredict.tidymodels.org"
   },
   {
     "name": "tidyr",
-    "path": "images/tidyr.svg",
+    "path": "images/tidyr.webp",
     "url": "https://tidyr.tidyverse.org"
   },
   {
     "name": "tidyverse",
-    "path": "images/tidyverse.svg",
+    "path": "images/tidyverse.webp",
     "url": "https://tidyverse.tidyverse.org"
   },
   {
     "name": "torch",
-    "path": "images/torch.svg",
+    "path": "images/torch.webp",
     "url": "https://torch.mlverse.org"
   },
   {
     "name": "tune",
-    "path": "images/tune.svg",
+    "path": "images/tune.webp",
     "url": "https://tune.tidymodels.org"
   },
   {
     "name": "usethis",
-    "path": "images/usethis.svg",
+    "path": "images/usethis.webp",
     "url": "https://usethis.r-lib.org"
   },
   {
     "name": "vctrs",
-    "path": "images/vctrs.svg",
+    "path": "images/vctrs.webp",
     "url": "https://vctrs.r-lib.org"
   },
   {
     "name": "vetiver",
-    "path": "images/vetiver.svg",
+    "path": "images/vetiver.webp",
     "url": "https://vetiver.posit.co"
   },
   {
     "name": "webr",
-    "path": "images/webr.svg",
+    "path": "images/webr.webp",
     "url": "https://docs.r-wasm.org/webr/"
   },
   {
     "name": "withr",
-    "path": "images/withr.svg",
+    "path": "images/withr.webp",
     "url": "https://withr.r-lib.org"
   },
   {
     "name": "workflows",
-    "path": "images/workflows.svg",
+    "path": "images/workflows.webp",
     "url": "https://workflows.tidymodels.org"
   },
   {
+    "name": "workflowsets",
+    "path": "images/workflowsets.webp",
+    "url": "https://workflowsets.tidymodels.org"
+  },
+  {
     "name": "xaringan",
-    "path": "images/xaringan.svg",
+    "path": "images/xaringan.webp",
     "url": "https://github.com/yihui/xaringan"
   },
   {
+    "name": "yaml12",
+    "path": "images/yaml12.webp",
+    "url": "https://posit-dev.github.io/r-yaml12"
+  },
+  {
     "name": "yardstick",
-    "path": "images/yardstick.svg",
+    "path": "images/yardstick.webp",
     "url": "https://yardstick.tidymodels.org"
   }
 ];
