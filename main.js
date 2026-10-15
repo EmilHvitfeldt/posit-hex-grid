@@ -4,6 +4,8 @@ let packages = typeof PACKAGES !== 'undefined' ? PACKAGES : [];
 const canvas = document.getElementById('grid');
 const ctx = canvas.getContext('2d');
 
+const SQRT3 = Math.sqrt(3);
+
 // Hex size (center to corner). Adjustable from the settings menu (press M).
 const BASE_R = 80;
 const GAP = 4;
@@ -13,20 +15,41 @@ let R = BASE_R;
 let colW = R * Math.sqrt(3);
 let rowH = R * 1.5;
 
-// Settings, persisted across visits
-const STORAGE_KEY = 'hex-grid-settings';
+// Settings are mirrored into the URL's query string, which is read back here on
+// load. That makes the address bar itself the share link:
+//   ?size=150&unique=1&off=air,ark   (or on=a,b,c when that's shorter)
 let sizeScale = 1;
 let disabled = new Set(); // package names hidden from the grid
-try {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-  if (saved.sizeScale >= 0.4 && saved.sizeScale <= 2.5) sizeScale = saved.sizeScale;
-  if (Array.isArray(saved.disabled)) disabled = new Set(saved.disabled);
-} catch {}
+let uniqueMode = false; // each sticker once, black everywhere else
+{
+  const q = new URLSearchParams(location.search);
+  const size = Number(q.get('size')) / 100;
+  if (size >= 0.4 && size <= 2.5) sizeScale = size;
+  uniqueMode = q.get('unique') === '1';
+  const list = key => (q.get(key) || '').split(',').filter(Boolean);
+  if (q.has('on')) {
+    const on = new Set(list('on'));
+    disabled = new Set(packages.map(p => p.name).filter(n => !on.has(n)));
+  } else {
+    disabled = new Set(list('off'));
+  }
+}
 
-function saveSettings() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ sizeScale, disabled: [...disabled] }));
-  } catch {}
+function shareURL() {
+  const q = new URLSearchParams();
+  if (sizeScale !== 1) q.set('size', Math.round(sizeScale * 100));
+  if (uniqueMode) q.set('unique', '1');
+  const off = packages.map(p => p.name).filter(n => disabled.has(n));
+  const on = packages.map(p => p.name).filter(n => !disabled.has(n));
+  if (off.length) {
+    // Whichever list is shorter keeps the link manageable.
+    if (off.length <= on.length) q.set('off', off.join(','));
+    else q.set('on', on.join(','));
+  }
+  const qs = q.toString();
+  // location.origin is "null" on file://, so cut the current URL instead.
+  const base = location.href.split(/[?#]/)[0];
+  return base + (qs ? `?${qs}` : '');
 }
 
 R = BASE_R * sizeScale;
@@ -102,13 +125,59 @@ async function rebuildBitmaps() {
 
 // --- Deterministic image assignment ---
 
+// Unique mode: pack the enabled stickers into a round cluster around cell
+// (0, 0), in a fixed shuffled order. Cells outside it stay empty.
+let uniqueLayout = new Map(); // "col,row" -> index into packages
+
+function mulberry32(seed) {
+  return () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function buildUniqueLayout() {
+  uniqueLayout = new Map();
+  const n = enabledIdx.length;
+  if (n === 0) return;
+  const radius = Math.ceil(Math.sqrt(n)) + 2;
+  const cells = [];
+  for (let row = -radius; row <= radius; row++) {
+    for (let col = -radius; col <= radius; col++) {
+      const x = (col + (row % 2 !== 0 ? 0.5 : 0)) * SQRT3;
+      const y = row * 1.5;
+      cells.push({ col, row, d: Math.hypot(x, y) });
+    }
+  }
+  cells.sort((a, b) => a.d - b.d || a.row - b.row || a.col - b.col);
+
+  const order = [...enabledIdx];
+  const rand = mulberry32(12345);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  order.forEach((pkgIdx, i) => uniqueLayout.set(`${cells[i].col},${cells[i].row}`, pkgIdx));
+}
+
+// Put the middle of the unique cluster in the middle of the screen.
+function centerView() {
+  panX = window.innerWidth / 2;
+  panY = window.innerHeight / 2;
+}
+
 function updateEnabled() {
   enabledIdx = packages.map((_, i) => i).filter(i => !disabled.has(packages[i].name));
+  buildUniqueLayout();
 }
 updateEnabled();
+if (uniqueMode) centerView();
 
-// Returns an index into packages, or -1 when every sticker is disabled.
+// Returns an index into packages, or -1 for an empty cell.
 function imageIndexForCell(col, row) {
+  if (uniqueMode) return uniqueLayout.get(`${col},${row}`) ?? -1;
   if (enabledIdx.length === 0) return -1;
   return enabledIdx[Math.abs((col * 73856093) ^ (row * 19349663)) % enabledIdx.length];
 }
@@ -155,8 +224,6 @@ function cellAtPoint(mx, my) {
 }
 
 // --- Drawing ---
-
-const SQRT3 = Math.sqrt(3);
 
 function drawHex(cx, cy, img, scale) {
   if (!img) return; // sticker failed to load; leave the cell empty
@@ -268,8 +335,9 @@ canvas.addEventListener('pointerdown', e => {
 
 canvas.addEventListener('mousemove', e => {
   const cell = cellAtPoint(e.clientX, e.clientY);
-  const col = cell ? cell.col : null;
-  const row = cell ? cell.row : null;
+  const filled = cell && imageIndexForCell(cell.col, cell.row) >= 0;
+  const col = filled ? cell.col : null;
+  const row = filled ? cell.row : null;
   if (col !== hoverCol || row !== hoverRow) {
     hoverCol = col;
     hoverRow = row;
@@ -356,6 +424,15 @@ function closePanel() {
 
 panelClose.addEventListener('click', closePanel);
 
+// Debounced: Safari rate-limits history updates and the slider fires constantly.
+let syncTimer = null;
+function syncURL() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    try { history.replaceState(null, '', shareURL()); } catch {}
+  }, 200);
+}
+
 // --- Settings menu (toggled with M; deliberately not advertised in the UI) ---
 
 const menu = document.getElementById('menu');
@@ -399,16 +476,27 @@ function setSize(scale) {
   hoverCol = hoverRow = activeCol = activeRow = null;
   hoverScale = 1.0;
   render();
+  syncURL();
   clearTimeout(setSize.timer);
   setSize.timer = setTimeout(rebuildBitmaps, 150);
+}
+
+function setUniqueMode(on) {
+  uniqueMode = on;
+  activeCol = activeRow = hoverCol = hoverRow = null;
+  cancelAnimationFrame(rafId);
+  velX = velY = 0;
+  if (on) centerView();
+  syncURL();
+  render();
 }
 
 function setEnabled(names, on) {
   for (const n of names) on ? disabled.delete(n) : disabled.add(n);
   updateEnabled();
   activeCol = activeRow = hoverCol = hoverRow = null;
-  saveSettings();
   updateCount();
+  syncURL();
   render();
 }
 
@@ -443,14 +531,32 @@ function setAllVisible(on) {
   setEnabled(names, on);
 }
 
+const uniqueBox = document.getElementById('menu-unique');
+uniqueBox.checked = uniqueMode;
+uniqueBox.addEventListener('change', () => setUniqueMode(uniqueBox.checked));
+
 sizeSlider.value = Math.round(sizeScale * 100);
 sizeValue.textContent = `${sizeSlider.value}%`;
 sizeSlider.addEventListener('input', () => {
   sizeValue.textContent = `${sizeSlider.value}%`;
   setSize(sizeSlider.value / 100);
 });
-sizeSlider.addEventListener('change', saveSettings);
 menuSearch.addEventListener('input', applyFilter);
+const shareBtn = document.getElementById('menu-share');
+shareBtn.addEventListener('click', async () => {
+  const url = shareURL();
+  let ok = true;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    ok = false;
+    window.prompt('Copy this link:', url);
+  }
+  if (ok) {
+    shareBtn.textContent = 'Link copied';
+    setTimeout(() => { shareBtn.textContent = 'Copy share link'; }, 1500);
+  }
+});
 document.getElementById('menu-all').addEventListener('click', () => setAllVisible(true));
 document.getElementById('menu-none').addEventListener('click', () => setAllVisible(false));
 document.getElementById('menu-close').addEventListener('click', () => toggleMenu(false));

@@ -249,3 +249,26 @@ canvas:active {
   height: 28px;
   object-fit: contain;
 }
+
+.menu-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.menu-share {
+  width: 100%;
+  background: #333;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.menu-share:hover {
+  color: #fff;
+  background: #555;
+}
