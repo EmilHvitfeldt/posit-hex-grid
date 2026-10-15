@@ -116,3 +116,159 @@ canvas:active {
   border: none;
   background: #fff;
 }
+
+.menu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: min(420px, calc(100vw - 32px));
+  max-height: min(640px, calc(100dvh - 32px));
+  background: #1a1a1a;
+  color: #ddd;
+  font-family: sans-serif;
+  font-size: 14px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -48%);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #222;
+  border-bottom: 1px solid #333;
+  border-radius: 10px 10px 0 0;
+}
+
+.menu-header h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.menu-close,
+.menu-actions button {
+  background: #333;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+.menu-close:hover,
+.menu-actions button:hover {
+  color: #fff;
+  background: #555;
+}
+
+.menu-section {
+  padding: 14px 16px;
+}
+
+.menu-section + .menu-section {
+  border-top: 1px solid #2a2a2a;
+}
+
+.menu-stickers {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.menu-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #aaa;
+}
+
+#menu-size {
+  width: 100%;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+#menu-search {
+  flex: 1;
+  min-width: 0;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #ddd;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+#menu-list {
+  list-style: none;
+  overflow-y: auto;
+  min-height: 120px;
+  border: 1px solid #2a2a2a;
+  border-radius: 6px;
+}
+
+#menu-list li[hidden] {
+  display: none;
+}
+
+#menu-list label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+#menu-list label:hover {
+  background: #262626;
+}
+
+#menu-list img {
+  width: 24px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.menu-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.menu-share {
+  width: 100%;
+  background: #333;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.menu-share:hover {
+  color: #fff;
+  background: #555;
+}

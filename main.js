@@ -4,15 +4,61 @@ let packages = typeof PACKAGES !== 'undefined' ? PACKAGES : [];
 const canvas = document.getElementById('grid');
 const ctx = canvas.getContext('2d');
 
-// Hex size (center to corner). Adjust for feel.
-const R = 80;
+const SQRT3 = Math.sqrt(3);
+
+// Hex size (center to corner). Adjustable from the settings menu (press M).
+const BASE_R = 80;
 const GAP = 4;
+let R = BASE_R;
 
 // Pointy-top hex spacing
-const colW = R * Math.sqrt(3);
-const rowH = R * 1.5;
+let colW = R * Math.sqrt(3);
+let rowH = R * 1.5;
 
+// Settings are mirrored into the URL's query string, which is read back here on
+// load. That makes the address bar itself the share link:
+//   ?size=150&unique=1&off=air,ark   (or on=a,b,c when that's shorter)
+let sizeScale = 1;
+let disabled = new Set(); // package names hidden from the grid
+let uniqueMode = false; // each sticker once, black everywhere else
+{
+  const q = new URLSearchParams(location.search);
+  const size = Number(q.get('size')) / 100;
+  if (size >= 0.4 && size <= 2.5) sizeScale = size;
+  uniqueMode = q.get('unique') === '1';
+  const list = key => (q.get(key) || '').split(',').filter(Boolean);
+  if (q.has('on')) {
+    const on = new Set(list('on'));
+    disabled = new Set(packages.map(p => p.name).filter(n => !on.has(n)));
+  } else {
+    disabled = new Set(list('off'));
+  }
+}
+
+function shareURL() {
+  const q = new URLSearchParams();
+  if (sizeScale !== 1) q.set('size', Math.round(sizeScale * 100));
+  if (uniqueMode) q.set('unique', '1');
+  const off = packages.map(p => p.name).filter(n => disabled.has(n));
+  const on = packages.map(p => p.name).filter(n => !disabled.has(n));
+  if (off.length) {
+    // Whichever list is shorter keeps the link manageable.
+    if (off.length <= on.length) q.set('off', off.join(','));
+    else q.set('on', on.join(','));
+  }
+  const qs = q.toString();
+  // location.origin is "null" on file://, so cut the current URL instead.
+  const base = location.href.split(/[?#]/)[0];
+  return base + (qs ? `?${qs}` : '');
+}
+
+R = BASE_R * sizeScale;
+colW = R * Math.sqrt(3);
+rowH = R * 1.5;
+
+let sources = []; // decoded <img> elements, kept so bitmaps can be rebuilt at a new size
 let images = [];
+let enabledIdx = []; // indices into packages that are currently shown
 let panX = 0;
 let panY = 0;
 let dragging = false;
@@ -38,36 +84,102 @@ let hoverAnimRaf = null;
 // Stickers are pre-rasterized to draw size by generate.js, so loading is just
 // a decode. Downsampling to the exact bitmap size here still helps: it keeps
 // drawImage on a 1:1 blit and shrinks what we hold in memory.
-async function loadImages() {
+function toBitmap(img) {
+  if (!img) return Promise.resolve(null);
   const dpr = window.devicePixelRatio || 1;
   const r = R - GAP;
-  const bmpW = Math.round(r * Math.sqrt(3) * dpr);
-  const bmpH = Math.round(r * 2 * dpr);
+  return createImageBitmap(img, {
+    resizeWidth: Math.round(r * Math.sqrt(3) * dpr),
+    resizeHeight: Math.round(r * 2 * dpr),
+    resizeQuality: 'high',
+  })
+    // On file:// the image counts as cross-origin, so it can't be turned
+    // into a bitmap. Hand back the element and let drawImage scale it.
+    .catch(() => img);
+}
+
+async function loadImages() {
   // Load via <img> rather than fetch so the page still works when opened
   // straight off disk — fetch refuses file:// URLs.
-  images = await Promise.all(
+  sources = await Promise.all(
     packages.map(pkg => new Promise(resolve => {
       const img = new Image();
-      img.onload = () => {
-        createImageBitmap(img, {
-          resizeWidth: bmpW,
-          resizeHeight: bmpH,
-          resizeQuality: 'high',
-        })
-          // On file:// the image counts as cross-origin, so it can't be turned
-          // into a bitmap. Hand back the element and let drawImage scale it.
-          .then(resolve, () => resolve(img));
-      };
+      img.onload = () => resolve(img);
       img.onerror = () => resolve(null);
       img.src = pkg.path;
     }))
   );
+  images = await Promise.all(sources.map(toBitmap));
+}
+
+// Re-rasterize for the current size. Until it finishes, the old bitmaps are
+// drawn scaled, which is fine for a moment.
+let rebuildToken = 0;
+async function rebuildBitmaps() {
+  const token = ++rebuildToken;
+  const next = await Promise.all(sources.map(toBitmap));
+  if (token !== rebuildToken) return;
+  images = next;
+  render();
 }
 
 // --- Deterministic image assignment ---
 
+// Unique mode: pack the enabled stickers into a round cluster around cell
+// (0, 0), in a fixed shuffled order. Cells outside it stay empty.
+let uniqueLayout = new Map(); // "col,row" -> index into packages
+
+function mulberry32(seed) {
+  return () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function buildUniqueLayout() {
+  uniqueLayout = new Map();
+  const n = enabledIdx.length;
+  if (n === 0) return;
+  const radius = Math.ceil(Math.sqrt(n)) + 2;
+  const cells = [];
+  for (let row = -radius; row <= radius; row++) {
+    for (let col = -radius; col <= radius; col++) {
+      const x = (col + (row % 2 !== 0 ? 0.5 : 0)) * SQRT3;
+      const y = row * 1.5;
+      cells.push({ col, row, d: Math.hypot(x, y) });
+    }
+  }
+  cells.sort((a, b) => a.d - b.d || a.row - b.row || a.col - b.col);
+
+  const order = [...enabledIdx];
+  const rand = mulberry32(12345);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  order.forEach((pkgIdx, i) => uniqueLayout.set(`${cells[i].col},${cells[i].row}`, pkgIdx));
+}
+
+// Put the middle of the unique cluster in the middle of the screen.
+function centerView() {
+  panX = window.innerWidth / 2;
+  panY = window.innerHeight / 2;
+}
+
+function updateEnabled() {
+  enabledIdx = packages.map((_, i) => i).filter(i => !disabled.has(packages[i].name));
+  buildUniqueLayout();
+}
+updateEnabled();
+if (uniqueMode) centerView();
+
+// Returns an index into packages, or -1 for an empty cell.
 function imageIndexForCell(col, row) {
-  return Math.abs((col * 73856093) ^ (row * 19349663)) % packages.length;
+  if (uniqueMode) return uniqueLayout.get(`${col},${row}`) ?? -1;
+  if (enabledIdx.length === 0) return -1;
+  return enabledIdx[Math.abs((col * 73856093) ^ (row * 19349663)) % enabledIdx.length];
 }
 
 function imageForCell(col, row) {
@@ -113,8 +225,6 @@ function cellAtPoint(mx, my) {
 
 // --- Drawing ---
 
-const SQRT3 = Math.sqrt(3);
-
 function drawHex(cx, cy, img, scale) {
   if (!img) return; // sticker failed to load; leave the cell empty
   const r = R - GAP;
@@ -135,7 +245,7 @@ function drawHex(cx, cy, img, scale) {
 function render() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if (images.length === 0) return;
+  if (images.length === 0 || enabledIdx.length === 0) return;
 
   // Visible range with 2-cell buffer
   const minCol = Math.floor(-panX / colW) - 2;
@@ -225,8 +335,9 @@ canvas.addEventListener('pointerdown', e => {
 
 canvas.addEventListener('mousemove', e => {
   const cell = cellAtPoint(e.clientX, e.clientY);
-  const col = cell ? cell.col : null;
-  const row = cell ? cell.row : null;
+  const filled = cell && imageIndexForCell(cell.col, cell.row) >= 0;
+  const col = filled ? cell.col : null;
+  const row = filled ? cell.row : null;
   if (col !== hoverCol || row !== hoverRow) {
     hoverCol = col;
     hoverRow = row;
@@ -262,10 +373,8 @@ canvas.addEventListener('pointerup', e => {
   // Treat as click only if pointer barely moved
   if (dragDist < 6) {
     const cell = cellAtPoint(e.clientX, e.clientY);
-    if (cell) {
-      const pkg = packages[imageIndexForCell(cell.col, cell.row)];
-      openPanel(pkg.url);
-    }
+    const idx = cell ? imageIndexForCell(cell.col, cell.row) : -1;
+    if (idx >= 0) openPanel(packages[idx].url);
   }
 });
 
@@ -315,6 +424,152 @@ function closePanel() {
 
 panelClose.addEventListener('click', closePanel);
 
+// Debounced: Safari rate-limits history updates and the slider fires constantly.
+let syncTimer = null;
+function syncURL() {
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => {
+    try { history.replaceState(null, '', shareURL()); } catch {}
+  }, 200);
+}
+
+// --- Settings menu (toggled with M; deliberately not advertised in the UI) ---
+
+const menu = document.getElementById('menu');
+const sizeSlider = document.getElementById('menu-size');
+const sizeValue = document.getElementById('menu-size-value');
+const menuSearch = document.getElementById('menu-search');
+const menuList = document.getElementById('menu-list');
+const menuCount = document.getElementById('menu-count');
+
+function toggleMenu(open = !menu.classList.contains('open')) {
+  menu.classList.toggle('open', open);
+  if (!open && document.activeElement && menu.contains(document.activeElement)) {
+    document.activeElement.blur();
+  }
+}
+
+function applyFilter() {
+  const q = menuSearch.value.trim().toLowerCase();
+  for (const li of menuList.children) {
+    li.hidden = q !== '' && !li.dataset.name.toLowerCase().includes(q);
+  }
+}
+
+function updateCount() {
+  menuCount.textContent = `${enabledIdx.length} of ${packages.length} shown`;
+}
+
+function setSize(scale) {
+  const ratio = (BASE_R * scale) / R;
+  sizeScale = scale;
+  R = BASE_R * scale;
+  colW = R * SQRT3;
+  rowH = R * 1.5;
+  // Zoom about the center of the screen so the view doesn't jump.
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  panX = cx - (cx - panX) * ratio;
+  panY = cy - (cy - panY) * ratio;
+  cancelAnimationFrame(rafId);
+  velX = velY = 0;
+  hoverCol = hoverRow = activeCol = activeRow = null;
+  hoverScale = 1.0;
+  render();
+  syncURL();
+  clearTimeout(setSize.timer);
+  setSize.timer = setTimeout(rebuildBitmaps, 150);
+}
+
+function setUniqueMode(on) {
+  uniqueMode = on;
+  activeCol = activeRow = hoverCol = hoverRow = null;
+  cancelAnimationFrame(rafId);
+  velX = velY = 0;
+  if (on) centerView();
+  syncURL();
+  render();
+}
+
+function setEnabled(names, on) {
+  for (const n of names) on ? disabled.delete(n) : disabled.add(n);
+  updateEnabled();
+  activeCol = activeRow = hoverCol = hoverRow = null;
+  updateCount();
+  syncURL();
+  render();
+}
+
+function buildMenuList() {
+  const sorted = [...packages].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+  for (const pkg of sorted) {
+    const li = document.createElement('li');
+    li.dataset.name = pkg.name;
+    const label = document.createElement('label');
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.checked = !disabled.has(pkg.name);
+    box.addEventListener('change', () => setEnabled([pkg.name], box.checked));
+    const img = document.createElement('img');
+    img.src = pkg.path;
+    img.loading = 'lazy';
+    img.alt = '';
+    const name = document.createElement('span');
+    name.textContent = pkg.name;
+    label.append(box, img, name);
+    li.append(label);
+    menuList.append(li);
+  }
+  updateCount();
+}
+
+function setAllVisible(on) {
+  const names = [...menuList.children].filter(li => !li.hidden).map(li => li.dataset.name);
+  for (const li of menuList.children) {
+    if (!li.hidden) li.querySelector('input').checked = on;
+  }
+  setEnabled(names, on);
+}
+
+const uniqueBox = document.getElementById('menu-unique');
+uniqueBox.checked = uniqueMode;
+uniqueBox.addEventListener('change', () => setUniqueMode(uniqueBox.checked));
+
+sizeSlider.value = Math.round(sizeScale * 100);
+sizeValue.textContent = `${sizeSlider.value}%`;
+sizeSlider.addEventListener('input', () => {
+  sizeValue.textContent = `${sizeSlider.value}%`;
+  setSize(sizeSlider.value / 100);
+});
+menuSearch.addEventListener('input', applyFilter);
+const shareBtn = document.getElementById('menu-share');
+shareBtn.addEventListener('click', async () => {
+  const url = shareURL();
+  let ok = true;
+  try {
+    await navigator.clipboard.writeText(url);
+  } catch {
+    ok = false;
+    window.prompt('Copy this link:', url);
+  }
+  if (ok) {
+    shareBtn.textContent = 'Link copied';
+    setTimeout(() => { shareBtn.textContent = 'Copy share link'; }, 1500);
+  }
+});
+document.getElementById('menu-all').addEventListener('click', () => setAllVisible(true));
+document.getElementById('menu-none').addEventListener('click', () => setAllVisible(false));
+document.getElementById('menu-close').addEventListener('click', () => toggleMenu(false));
+buildMenuList();
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closePanel();
+  if (e.key === 'Escape') {
+    closePanel();
+    toggleMenu(false);
+    return;
+  }
+  const typing = e.target.matches?.('input[type="search"], input[type="text"], textarea');
+  if ((e.key === 'm' || e.key === 'M') && !typing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    toggleMenu();
+  }
 });
