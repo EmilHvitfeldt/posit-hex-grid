@@ -3,821 +3,985 @@ const PACKAGES = [
   {
     "name": "R6",
     "path": "images/R6.webp",
-    "url": "https://r6.r-lib.org"
+    "url": "https://r6.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "RStudio",
     "path": "images/RStudio.webp",
-    "url": "https://posit.co/products/open-source/rstudio/"
+    "url": "https://posit.co/products/open-source/rstudio/",
+    "group": "Developer tools"
   },
   {
     "name": "agua",
     "path": "images/agua.webp",
-    "url": "https://agua.tidymodels.org"
+    "url": "https://agua.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "air",
     "path": "images/air.webp",
-    "url": "https://posit-dev.github.io/air/"
+    "url": "https://posit-dev.github.io/air/",
+    "group": "Developer tools"
   },
   {
     "name": "applicable",
     "path": "images/applicable.webp",
-    "url": "https://applicable.tidymodels.org"
+    "url": "https://applicable.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "ark",
     "path": "images/ark.webp",
-    "url": "https://github.com/posit-dev/ark"
+    "url": "https://github.com/posit-dev/ark",
+    "group": "Developer tools"
   },
   {
     "name": "baguette",
     "path": "images/baguette.webp",
-    "url": "https://baguette.tidymodels.org"
+    "url": "https://baguette.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "blastula",
     "path": "images/blastula.webp",
-    "url": "https://rstudio.github.io/blastula/"
+    "url": "https://rstudio.github.io/blastula/",
+    "group": "Docs & publishing"
   },
   {
     "name": "blogdown",
     "path": "images/blogdown.webp",
-    "url": "https://rstudio.github.io/blogdown/"
+    "url": "https://rstudio.github.io/blogdown/",
+    "group": "Docs & publishing"
   },
   {
     "name": "bonsai",
     "path": "images/bonsai.webp",
-    "url": "https://bonsai.tidymodels.org"
+    "url": "https://bonsai.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "bookdown",
     "path": "images/bookdown.webp",
-    "url": "https://rstudio.github.io/bookdown/"
+    "url": "https://rstudio.github.io/bookdown/",
+    "group": "Docs & publishing"
   },
   {
     "name": "broom",
     "path": "images/broom.webp",
-    "url": "https://broom.tidyverse.org"
+    "url": "https://broom.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "brulee",
     "path": "images/brulee.webp",
-    "url": "https://brulee.tidymodels.org"
+    "url": "https://brulee.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "bslib",
     "path": "images/bslib.webp",
-    "url": "https://rstudio.github.io/bslib/"
+    "url": "https://rstudio.github.io/bslib/",
+    "group": "Shiny & web"
   },
   {
     "name": "btw",
     "path": "images/btw.webp",
-    "url": "https://posit-dev.github.io/btw"
+    "url": "https://posit-dev.github.io/btw",
+    "group": "AI & LLMs"
   },
   {
     "name": "butcher",
     "path": "images/butcher.webp",
-    "url": "https://butcher.tidymodels.org"
+    "url": "https://butcher.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "censored",
     "path": "images/censored.webp",
-    "url": "https://censored.tidymodels.org"
+    "url": "https://censored.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "chatlas",
     "path": "images/chatlas.webp",
-    "url": "https://posit-dev.github.io/chatlas/"
+    "url": "https://posit-dev.github.io/chatlas/",
+    "group": "AI & LLMs"
   },
   {
     "name": "chattr",
     "path": "images/chattr.webp",
-    "url": "https://mlverse.github.io/chattr/"
+    "url": "https://mlverse.github.io/chattr/",
+    "group": "AI & LLMs"
   },
   {
     "name": "chromote",
     "path": "images/chromote.webp",
-    "url": "https://rstudio.github.io/chromote/"
+    "url": "https://rstudio.github.io/chromote/",
+    "group": "Shiny & web"
   },
   {
     "name": "clock",
     "path": "images/clock.webp",
-    "url": "https://clock.r-lib.org"
+    "url": "https://clock.r-lib.org",
+    "group": "Tidyverse"
   },
   {
     "name": "connectapi",
     "path": "images/connectapi.webp",
-    "url": "https://pkgs.rstudio.com/connectapi/"
+    "url": "https://pkgs.rstudio.com/connectapi/",
+    "group": "Data & deployment"
   },
   {
     "name": "connections",
     "path": "images/connections.webp",
-    "url": "https://rstudio.github.io/connections/"
+    "url": "https://rstudio.github.io/connections/",
+    "group": "Data & deployment"
   },
   {
     "name": "corrr",
     "path": "images/corrr.webp",
-    "url": "https://corrr.tidymodels.org"
+    "url": "https://corrr.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "covr",
     "path": "images/covr.webp",
-    "url": "https://covr.r-lib.org"
+    "url": "https://covr.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "dbplot",
     "path": "images/dbplot.webp",
-    "url": "https://edgararuiz.github.io/dbplot/"
+    "url": "https://edgararuiz.github.io/dbplot/",
+    "group": "Data & deployment"
   },
   {
     "name": "dbplyr",
     "path": "images/dbplyr.webp",
-    "url": "https://dbplyr.tidyverse.org"
+    "url": "https://dbplyr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "debrief",
     "path": "images/debrief.webp",
-    "url": "https://r-lib.github.io/debrief/"
+    "url": "https://r-lib.github.io/debrief/",
+    "group": "Developer tools"
   },
   {
     "name": "devtools",
     "path": "images/devtools.webp",
-    "url": "https://devtools.r-lib.org"
+    "url": "https://devtools.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "dials",
     "path": "images/dials.webp",
-    "url": "https://dials.tidymodels.org"
+    "url": "https://dials.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "discrim",
     "path": "images/discrim.webp",
-    "url": "https://discrim.tidymodels.org"
+    "url": "https://discrim.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "distill",
     "path": "images/distill.webp",
-    "url": "https://rstudio.github.io/distill/"
+    "url": "https://rstudio.github.io/distill/",
+    "group": "Docs & publishing"
   },
   {
     "name": "dplyr",
     "path": "images/dplyr.webp",
-    "url": "https://dplyr.tidyverse.org"
+    "url": "https://dplyr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "dsbox",
     "path": "images/dsbox.webp",
-    "url": "https://datasciencebox.org"
+    "url": "https://datasciencebox.org",
+    "group": "Other"
   },
   {
     "name": "dtplyr",
     "path": "images/dtplyr.webp",
-    "url": "https://dtplyr.tidyverse.org"
+    "url": "https://dtplyr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "duckplyr",
     "path": "images/duckplyr.webp",
-    "url": "https://duckplyr.tidyverse.org"
+    "url": "https://duckplyr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "ellmer",
     "path": "images/ellmer.webp",
-    "url": "https://ellmer.tidyverse.org"
+    "url": "https://ellmer.tidyverse.org",
+    "group": "AI & LLMs"
   },
   {
     "name": "embed",
     "path": "images/embed.webp",
-    "url": "https://embed.tidymodels.org"
+    "url": "https://embed.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "farver",
     "path": "images/farver.webp",
-    "url": "https://farver.data-imaginist.com"
+    "url": "https://farver.data-imaginist.com",
+    "group": "Tables & graphics"
   },
   {
     "name": "feather",
     "path": "images/feather.webp",
-    "url": "https://github.com/wesm/feather"
+    "url": "https://github.com/wesm/feather",
+    "group": "Data & deployment"
   },
   {
     "name": "filtro",
     "path": "images/filtro.webp",
-    "url": "https://filtro.tidymodels.org"
+    "url": "https://filtro.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "finetune",
     "path": "images/finetune.webp",
-    "url": "https://finetune.tidymodels.org"
+    "url": "https://finetune.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "flexdashboard",
     "path": "images/flexdashboard.webp",
-    "url": "https://rstudio.github.io/flexdashboard/"
+    "url": "https://rstudio.github.io/flexdashboard/",
+    "group": "Shiny & web"
   },
   {
     "name": "forcats",
     "path": "images/forcats.webp",
-    "url": "https://forcats.tidyverse.org"
+    "url": "https://forcats.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "fs",
     "path": "images/fs.webp",
-    "url": "https://fs.r-lib.org"
+    "url": "https://fs.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "furrr",
     "path": "images/furrr.webp",
-    "url": "https://furrr.futureverse.org"
+    "url": "https://furrr.futureverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "gganimate",
     "path": "images/gganimate.webp",
-    "url": "https://gganimate.com"
+    "url": "https://gganimate.com",
+    "group": "Tables & graphics"
   },
   {
     "name": "ggplot2",
     "path": "images/ggplot2.webp",
-    "url": "https://ggplot2.tidyverse.org"
+    "url": "https://ggplot2.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "ggsql",
     "path": "images/ggsql.webp",
-    "url": "https://r.ggsql.org"
+    "url": "https://r.ggsql.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "glue",
     "path": "images/glue.webp",
-    "url": "https://glue.tidyverse.org"
+    "url": "https://glue.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "googledrive",
     "path": "images/googledrive.webp",
-    "url": "https://googledrive.tidyverse.org"
+    "url": "https://googledrive.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "googlesheets",
     "path": "images/googlesheets.webp",
-    "url": "https://github.com/jennybc/googlesheets"
+    "url": "https://github.com/jennybc/googlesheets",
+    "group": "Tidyverse"
   },
   {
     "name": "googlesheets4",
     "path": "images/googlesheets4.webp",
-    "url": "https://googlesheets4.tidyverse.org"
+    "url": "https://googlesheets4.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "great_tables",
     "path": "images/great_tables.webp",
-    "url": "https://posit-dev.github.io/great-tables/"
+    "url": "https://posit-dev.github.io/great-tables/",
+    "group": "Tables & graphics"
   },
   {
     "name": "gt",
     "path": "images/gt.webp",
-    "url": "https://gt.rstudio.com"
+    "url": "https://gt.rstudio.com",
+    "group": "Tables & graphics"
   },
   {
     "name": "gtable",
     "path": "images/gtable.webp",
-    "url": "https://gtable.r-lib.org"
+    "url": "https://gtable.r-lib.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "hardhat",
     "path": "images/hardhat.webp",
-    "url": "https://hardhat.tidymodels.org"
+    "url": "https://hardhat.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "haven",
     "path": "images/haven.webp",
-    "url": "https://haven.tidyverse.org"
+    "url": "https://haven.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "hms",
     "path": "images/hms.webp",
-    "url": "https://hms.tidyverse.org"
+    "url": "https://hms.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "htmltools",
     "path": "images/htmltools.webp",
-    "url": "https://rstudio.github.io/htmltools/"
+    "url": "https://rstudio.github.io/htmltools/",
+    "group": "Shiny & web"
   },
   {
     "name": "httr2",
     "path": "images/httr2.webp",
-    "url": "https://httr2.r-lib.org"
+    "url": "https://httr2.r-lib.org",
+    "group": "Tidyverse"
   },
   {
     "name": "important",
     "path": "images/important.webp",
-    "url": "https://important.tidymodels.org"
+    "url": "https://important.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "infer",
     "path": "images/infer.webp",
-    "url": "https://infer.tidymodels.org"
+    "url": "https://infer.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "keras3",
     "path": "images/keras3.webp",
-    "url": "https://keras.posit.co"
+    "url": "https://keras.posit.co",
+    "group": "Deep learning"
   },
   {
     "name": "knitr",
     "path": "images/knitr.webp",
-    "url": "https://yihui.org/knitr/"
+    "url": "https://yihui.org/knitr/",
+    "group": "Docs & publishing"
   },
   {
     "name": "lintr",
     "path": "images/lintr.webp",
-    "url": "https://lintr.r-lib.org"
+    "url": "https://lintr.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "lobstr",
     "path": "images/lobstr.webp",
-    "url": "https://lobstr.r-lib.org"
+    "url": "https://lobstr.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "lorax",
     "path": "images/lorax.webp",
-    "url": "https://github.com/tidymodels/lorax"
+    "url": "https://github.com/tidymodels/lorax",
+    "group": "Tidymodels"
   },
   {
     "name": "lubridate",
     "path": "images/lubridate.webp",
-    "url": "https://lubridate.tidyverse.org"
+    "url": "https://lubridate.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "luz",
     "path": "images/luz.webp",
-    "url": "https://mlverse.github.io/luz/"
+    "url": "https://mlverse.github.io/luz/",
+    "group": "Deep learning"
   },
   {
     "name": "mall",
     "path": "images/mall.webp",
-    "url": "https://mlverse.github.io/mall/"
+    "url": "https://mlverse.github.io/mall/",
+    "group": "AI & LLMs"
   },
   {
     "name": "marquee",
     "path": "images/marquee.webp",
-    "url": "https://marquee.r-lib.org"
+    "url": "https://marquee.r-lib.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "miniCRAN",
     "path": "images/miniCRAN.webp",
-    "url": "https://andrie.github.io/miniCRAN/"
+    "url": "https://andrie.github.io/miniCRAN/",
+    "group": "Developer tools"
   },
   {
     "name": "mirai",
     "path": "images/mirai.webp",
-    "url": "https://mirai.r-lib.org"
+    "url": "https://mirai.r-lib.org",
+    "group": "Shiny & web"
   },
   {
     "name": "modeldb",
     "path": "images/modeldb.webp",
-    "url": "https://tidymodels.github.io/modeldb/"
+    "url": "https://tidymodels.github.io/modeldb/",
+    "group": "Data & deployment"
   },
   {
     "name": "modelr",
     "path": "images/modelr.webp",
-    "url": "https://modelr.tidyverse.org"
+    "url": "https://modelr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "multilevelmod",
     "path": "images/multilevelmod.webp",
-    "url": "https://multilevelmod.tidymodels.org"
+    "url": "https://multilevelmod.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "odbc",
     "path": "images/odbc.webp",
-    "url": "https://odbc.r-dbi.org"
+    "url": "https://odbc.r-dbi.org",
+    "group": "Data & deployment"
   },
   {
     "name": "orbital",
     "path": "images/orbital.webp",
-    "url": "https://orbital.tidymodels.org"
+    "url": "https://orbital.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "pagedown",
     "path": "images/pagedown.webp",
-    "url": "https://pagedown.rbind.io"
+    "url": "https://pagedown.rbind.io",
+    "group": "Docs & publishing"
   },
   {
     "name": "parsnip",
     "path": "images/parsnip.webp",
-    "url": "https://parsnip.tidymodels.org"
+    "url": "https://parsnip.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "patchwork",
     "path": "images/patchwork.webp",
-    "url": "https://patchwork.data-imaginist.com"
+    "url": "https://patchwork.data-imaginist.com",
+    "group": "Tables & graphics"
   },
   {
     "name": "pins",
     "path": "images/pins.webp",
-    "url": "https://pins.rstudio.com"
+    "url": "https://pins.rstudio.com",
+    "group": "Data & deployment"
   },
   {
     "name": "pipe",
     "path": "images/pipe.webp",
-    "url": "https://magrittr.tidyverse.org"
+    "url": "https://magrittr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "pkgdown",
     "path": "images/pkgdown.webp",
-    "url": "https://pkgdown.r-lib.org"
+    "url": "https://pkgdown.r-lib.org",
+    "group": "Docs & publishing"
   },
   {
     "name": "plotnine",
     "path": "images/plotnine.webp",
-    "url": "https://plotnine.org"
+    "url": "https://plotnine.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "plsmod",
     "path": "images/plsmod.webp",
-    "url": "https://plsmod.tidymodels.org"
+    "url": "https://plsmod.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "plumber",
     "path": "images/plumber.webp",
-    "url": "https://www.rplumber.io"
+    "url": "https://www.rplumber.io",
+    "group": "Shiny & web"
   },
   {
     "name": "plumber2",
     "path": "images/plumber2.webp",
-    "url": "https://plumber2.posit.co/"
+    "url": "https://plumber2.posit.co/",
+    "group": "Shiny & web"
   },
   {
     "name": "plumbertableau",
     "path": "images/plumbertableau.webp",
-    "url": "https://rstudio.github.io/plumbertableau/"
+    "url": "https://rstudio.github.io/plumbertableau/",
+    "group": "Shiny & web"
   },
   {
     "name": "pointblank",
     "path": "images/pointblank.webp",
-    "url": "https://rstudio.github.io/pointblank/"
+    "url": "https://rstudio.github.io/pointblank/",
+    "group": "Tables & graphics"
   },
   {
     "name": "poissonreg",
     "path": "images/poissonreg.webp",
-    "url": "https://poissonreg.tidymodels.org"
+    "url": "https://poissonreg.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "positron",
     "path": "images/positron.webp",
-    "url": "https://positron.posit.co"
+    "url": "https://positron.posit.co",
+    "group": "Developer tools"
   },
   {
     "name": "probably",
     "path": "images/probably.webp",
-    "url": "https://probably.tidymodels.org"
+    "url": "https://probably.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "promises",
     "path": "images/promises.webp",
-    "url": "https://rstudio.github.io/promises/"
+    "url": "https://rstudio.github.io/promises/",
+    "group": "Shiny & web"
   },
   {
     "name": "purrr",
     "path": "images/purrr.webp",
-    "url": "https://purrr.tidyverse.org"
+    "url": "https://purrr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "quarto",
     "path": "images/quarto.webp",
-    "url": "https://quarto.org"
+    "url": "https://quarto.org",
+    "group": "Docs & publishing"
   },
   {
     "name": "querychat",
     "path": "images/querychat.webp",
-    "url": "https://posit-dev.github.io/querychat/r"
+    "url": "https://posit-dev.github.io/querychat/r",
+    "group": "AI & LLMs"
   },
   {
     "name": "quickr",
     "path": "images/quickr.webp",
-    "url": "https://github.com/t-kalinowski/quickr"
+    "url": "https://github.com/t-kalinowski/quickr",
+    "group": "Developer tools"
   },
   {
     "name": "r2d3",
     "path": "images/r2d3.webp",
-    "url": "https://rstudio.github.io/r2d3/"
+    "url": "https://rstudio.github.io/r2d3/",
+    "group": "Shiny & web"
   },
   {
     "name": "ragg",
     "path": "images/ragg.webp",
-    "url": "https://ragg.r-lib.org"
+    "url": "https://ragg.r-lib.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "raghilda",
     "path": "images/raghilda.webp",
-    "url": "https://posit-dev.github.io/raghilda/"
+    "url": "https://posit-dev.github.io/raghilda/",
+    "group": "AI & LLMs"
   },
   {
     "name": "ragnar",
     "path": "images/ragnar.webp",
-    "url": "https://ragnar.tidyverse.org"
+    "url": "https://ragnar.tidyverse.org",
+    "group": "AI & LLMs"
   },
   {
     "name": "rapp",
     "path": "images/rapp.webp",
-    "url": "https://github.com/r-lib/Rapp"
+    "url": "https://github.com/r-lib/Rapp",
+    "group": "Shiny & web"
   },
   {
     "name": "reactlog",
     "path": "images/reactlog.webp",
-    "url": "https://rstudio.github.io/reactlog/"
+    "url": "https://rstudio.github.io/reactlog/",
+    "group": "Shiny & web"
   },
   {
     "name": "readr",
     "path": "images/readr.webp",
-    "url": "https://readr.tidyverse.org"
+    "url": "https://readr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "readxl",
     "path": "images/readxl.webp",
-    "url": "https://readxl.tidyverse.org"
+    "url": "https://readxl.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "recipes",
     "path": "images/recipes.webp",
-    "url": "https://recipes.tidymodels.org"
+    "url": "https://recipes.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "renv",
     "path": "images/renv.webp",
-    "url": "https://rstudio.github.io/renv/"
+    "url": "https://rstudio.github.io/renv/",
+    "group": "Developer tools"
   },
   {
     "name": "reprex",
     "path": "images/reprex.webp",
-    "url": "https://reprex.tidyverse.org"
+    "url": "https://reprex.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "reticulate",
     "path": "images/reticulate.webp",
-    "url": "https://rstudio.github.io/reticulate/"
+    "url": "https://rstudio.github.io/reticulate/",
+    "group": "Deep learning"
   },
   {
     "name": "rlang",
     "path": "images/rlang.webp",
-    "url": "https://rlang.r-lib.org"
+    "url": "https://rlang.r-lib.org",
+    "group": "Tidyverse"
   },
   {
     "name": "rmarkdown",
     "path": "images/rmarkdown.webp",
-    "url": "https://rmarkdown.rstudio.com"
+    "url": "https://rmarkdown.rstudio.com",
+    "group": "Docs & publishing"
   },
   {
     "name": "roxygen2",
     "path": "images/roxygen2.webp",
-    "url": "https://roxygen2.r-lib.org"
+    "url": "https://roxygen2.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "rray",
     "path": "images/rray.webp",
-    "url": "https://rray.r-lib.org"
+    "url": "https://rray.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "rrd",
     "path": "images/rrd.webp",
-    "url": "https://andrie.github.io/rrd/"
+    "url": "https://andrie.github.io/rrd/",
+    "group": "Developer tools"
   },
   {
     "name": "rsample",
     "path": "images/rsample.webp",
-    "url": "https://rsample.tidymodels.org"
+    "url": "https://rsample.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "rsconnect",
     "path": "images/rsconnect.webp",
-    "url": "https://rstudio.github.io/rsconnect/"
+    "url": "https://rstudio.github.io/rsconnect/",
+    "group": "Data & deployment"
   },
   {
     "name": "rstudioapi",
     "path": "images/rstudioapi.webp",
-    "url": "https://rstudio.github.io/rstudioapi/"
+    "url": "https://rstudio.github.io/rstudioapi/",
+    "group": "Developer tools"
   },
   {
     "name": "rticles",
     "path": "images/rticles.webp",
-    "url": "https://pkgs.rstudio.com/rticles/"
+    "url": "https://pkgs.rstudio.com/rticles/",
+    "group": "Docs & publishing"
   },
   {
     "name": "rules",
     "path": "images/rules.webp",
-    "url": "https://rules.tidymodels.org"
+    "url": "https://rules.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "rvest",
     "path": "images/rvest.webp",
-    "url": "https://rvest.tidyverse.org"
+    "url": "https://rvest.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "rwasm",
     "path": "images/rwasm.webp",
-    "url": "https://r-wasm.github.io/rwasm/"
+    "url": "https://r-wasm.github.io/rwasm/",
+    "group": "Shiny & web"
   },
   {
     "name": "sass",
     "path": "images/sass.webp",
-    "url": "https://rstudio.github.io/sass/"
+    "url": "https://rstudio.github.io/sass/",
+    "group": "Shiny & web"
   },
   {
     "name": "scales",
     "path": "images/scales.webp",
-    "url": "https://scales.r-lib.org"
+    "url": "https://scales.r-lib.org",
+    "group": "Tidyverse"
   },
   {
     "name": "shiny",
     "path": "images/shiny.webp",
-    "url": "https://shiny.posit.co"
+    "url": "https://shiny.posit.co",
+    "group": "Shiny & web"
   },
   {
     "name": "shinychat",
     "path": "images/shinychat.webp",
-    "url": "https://posit-dev.github.io/shinychat/"
+    "url": "https://posit-dev.github.io/shinychat/",
+    "group": "Shiny & web"
   },
   {
     "name": "shinyreact",
     "path": "images/shinyreact.webp",
-    "url": "https://github.com/posit-dev/shinyreact"
+    "url": "https://github.com/posit-dev/shinyreact",
+    "group": "Shiny & web"
   },
   {
     "name": "shinytest2",
     "path": "images/shinytest2.webp",
-    "url": "https://rstudio.github.io/shinytest2/"
+    "url": "https://rstudio.github.io/shinytest2/",
+    "group": "Shiny & web"
   },
   {
     "name": "siuba",
     "path": "images/siuba.webp",
-    "url": "https://siuba.org"
+    "url": "https://siuba.org",
+    "group": "Developer tools"
   },
   {
     "name": "sloop",
     "path": "images/sloop.webp",
-    "url": "https://sloop.r-lib.org"
+    "url": "https://sloop.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "sortable",
     "path": "images/sortable.webp",
-    "url": "https://rstudio.github.io/sortable/"
+    "url": "https://rstudio.github.io/sortable/",
+    "group": "Shiny & web"
   },
   {
     "name": "sparklyr",
     "path": "images/sparklyr.webp",
-    "url": "https://spark.rstudio.com"
+    "url": "https://spark.rstudio.com",
+    "group": "Data & deployment"
   },
   {
     "name": "sparsevctrs",
     "path": "images/sparsevctrs.webp",
-    "url": "https://r-lib.github.io/sparsevctrs/"
+    "url": "https://r-lib.github.io/sparsevctrs/",
+    "group": "Tidymodels"
   },
   {
     "name": "spatialsample",
     "path": "images/spatialsample.webp",
-    "url": "https://spatialsample.tidymodels.org"
+    "url": "https://spatialsample.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "sss",
     "path": "images/sss.webp",
-    "url": "https://andrie.github.io/sss/"
+    "url": "https://andrie.github.io/sss/",
+    "group": "Other"
   },
   {
     "name": "stacks",
     "path": "images/stacks.webp",
-    "url": "https://stacks.tidymodels.org"
+    "url": "https://stacks.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "stringr",
     "path": "images/stringr.webp",
-    "url": "https://stringr.tidyverse.org"
+    "url": "https://stringr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "svglite",
     "path": "images/svglite.webp",
-    "url": "https://svglite.r-lib.org"
+    "url": "https://svglite.r-lib.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "systemfonts",
     "path": "images/systemfonts.webp",
-    "url": "https://systemfonts.r-lib.org"
+    "url": "https://systemfonts.r-lib.org",
+    "group": "Tables & graphics"
   },
   {
     "name": "tabby",
     "path": "images/tabby.webp",
-    "url": "https://tabby.tidymodels.org"
+    "url": "https://tabby.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tensorflow",
     "path": "images/tensorflow.webp",
-    "url": "https://tensorflow.rstudio.com"
+    "url": "https://tensorflow.rstudio.com",
+    "group": "Deep learning"
   },
   {
     "name": "testthat",
     "path": "images/testthat.webp",
-    "url": "https://testthat.r-lib.org"
+    "url": "https://testthat.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "textrecipes",
     "path": "images/textrecipes.webp",
-    "url": "https://textrecipes.tidymodels.org"
+    "url": "https://textrecipes.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "themis",
     "path": "images/themis.webp",
-    "url": "https://themis.tidymodels.org"
+    "url": "https://themis.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tibble",
     "path": "images/tibble.webp",
-    "url": "https://tibble.tidyverse.org"
+    "url": "https://tibble.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "tidyclust",
     "path": "images/tidyclust.webp",
-    "url": "https://tidyclust.tidymodels.org"
+    "url": "https://tidyclust.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tidymodels",
     "path": "images/tidymodels.webp",
-    "url": "https://tidymodels.tidymodels.org"
+    "url": "https://tidymodels.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tidyposterior",
     "path": "images/tidyposterior.webp",
-    "url": "https://tidyposterior.tidymodels.org"
+    "url": "https://tidyposterior.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tidypredict",
     "path": "images/tidypredict.webp",
-    "url": "https://tidypredict.tidymodels.org"
+    "url": "https://tidypredict.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "tidyr",
     "path": "images/tidyr.webp",
-    "url": "https://tidyr.tidyverse.org"
+    "url": "https://tidyr.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "tidyverse",
     "path": "images/tidyverse.webp",
-    "url": "https://tidyverse.tidyverse.org"
+    "url": "https://tidyverse.tidyverse.org",
+    "group": "Tidyverse"
   },
   {
     "name": "torch",
     "path": "images/torch.webp",
-    "url": "https://torch.mlverse.org"
+    "url": "https://torch.mlverse.org",
+    "group": "Deep learning"
   },
   {
     "name": "tune",
     "path": "images/tune.webp",
-    "url": "https://tune.tidymodels.org"
+    "url": "https://tune.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "usethis",
     "path": "images/usethis.webp",
-    "url": "https://usethis.r-lib.org"
+    "url": "https://usethis.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "vctrs",
     "path": "images/vctrs.webp",
-    "url": "https://vctrs.r-lib.org"
+    "url": "https://vctrs.r-lib.org",
+    "group": "Tidyverse"
   },
   {
     "name": "vetiver",
     "path": "images/vetiver.webp",
-    "url": "https://vetiver.posit.co"
+    "url": "https://vetiver.posit.co",
+    "group": "Data & deployment"
   },
   {
     "name": "webr",
     "path": "images/webr.webp",
-    "url": "https://docs.r-wasm.org/webr/"
+    "url": "https://docs.r-wasm.org/webr/",
+    "group": "Shiny & web"
   },
   {
     "name": "withr",
     "path": "images/withr.webp",
-    "url": "https://withr.r-lib.org"
+    "url": "https://withr.r-lib.org",
+    "group": "Developer tools"
   },
   {
     "name": "workflows",
     "path": "images/workflows.webp",
-    "url": "https://workflows.tidymodels.org"
+    "url": "https://workflows.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "workflowsets",
     "path": "images/workflowsets.webp",
-    "url": "https://workflowsets.tidymodels.org"
+    "url": "https://workflowsets.tidymodels.org",
+    "group": "Tidymodels"
   },
   {
     "name": "xaringan",
     "path": "images/xaringan.webp",
-    "url": "https://github.com/yihui/xaringan"
+    "url": "https://github.com/yihui/xaringan",
+    "group": "Docs & publishing"
   },
   {
     "name": "yaml12",
     "path": "images/yaml12.webp",
-    "url": "https://posit-dev.github.io/r-yaml12"
+    "url": "https://posit-dev.github.io/r-yaml12",
+    "group": "Developer tools"
   },
   {
     "name": "yardstick",
     "path": "images/yardstick.webp",
-    "url": "https://yardstick.tidymodels.org"
+    "url": "https://yardstick.tidymodels.org",
+    "group": "Tidymodels"
   }
 ];

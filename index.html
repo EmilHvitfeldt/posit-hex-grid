@@ -42,24 +42,58 @@
       <h2>Settings</h2>
       <button id="menu-close" class="menu-close" aria-label="Close">&#x2715;</button>
     </div>
-    <div class="menu-section">
-      <label for="menu-size" class="menu-label">Hex size <span id="menu-size-value"></span></label>
-      <input id="menu-size" type="range" min="40" max="250" step="5" value="100" />
-    </div>
-    <div class="menu-section">
-      <label class="menu-check"><input id="menu-unique" type="checkbox" /> Show each sticker once</label>
-    </div>
-    <div class="menu-section">
-      <button id="menu-share" class="menu-share" type="button">Copy share link</button>
-    </div>
-    <div class="menu-section menu-stickers">
-      <div class="menu-label">Stickers <span id="menu-count"></span></div>
-      <div class="menu-actions">
-        <input id="menu-search" type="search" placeholder="Filter" autocomplete="off" />
-        <button id="menu-all" type="button">All</button>
-        <button id="menu-none" type="button">None</button>
+    <div class="menu-body">
+      <details class="menu-section" open>
+        <summary>Appearance</summary>
+        <div class="menu-field">
+          <label for="menu-size" class="menu-label">Hex size <span id="menu-size-value"></span></label>
+          <input id="menu-size" type="range" min="40" max="250" step="5" />
+        </div>
+        <div class="menu-field">
+          <label for="menu-gap" class="menu-label">Gap <span id="menu-gap-value"></span></label>
+          <input id="menu-gap" type="range" min="0" max="24" step="1" />
+        </div>
+        <div class="menu-field">
+          <div class="menu-label">Background</div>
+          <div id="menu-swatches" class="menu-swatches">
+            <input id="menu-bg-custom" type="color" aria-label="Custom background color" />
+          </div>
+        </div>
+      </details>
+      <details class="menu-section" open>
+        <summary>Motion</summary>
+        <div class="menu-field">
+          <label for="menu-scroll" class="menu-label">Scroll speed <span id="menu-scroll-value"></span></label>
+          <input id="menu-scroll" type="range" min="25" max="300" step="5" />
+        </div>
+        <div class="menu-field">
+          <label for="menu-momentum" class="menu-label">Momentum <span id="menu-momentum-value"></span></label>
+          <input id="menu-momentum" type="range" min="0" max="95" step="5" />
+        </div>
+        <label class="menu-check"><input id="menu-drift" type="checkbox" /> Slow auto drift</label>
+        <div class="menu-drift">
+          <div id="menu-dir" class="menu-dir" role="radiogroup" aria-label="Drift direction"></div>
+          <div class="menu-field">
+            <label for="menu-dspeed" class="menu-label">Drift speed <span id="menu-dspeed-value"></span></label>
+            <input id="menu-dspeed" type="range" min="5" max="100" step="5" />
+          </div>
+        </div>
+      </details>
+      <div class="menu-section menu-stickers">
+        <div class="menu-label">Stickers <span id="menu-count"></span></div>
+        <label class="menu-check"><input id="menu-unique" type="checkbox" /> Show each sticker once</label>
+        <div id="menu-groups" class="menu-groups"></div>
+        <div class="menu-actions">
+          <input id="menu-search" type="search" placeholder="Filter" autocomplete="off" />
+          <button id="menu-all" type="button">All</button>
+          <button id="menu-none" type="button">None</button>
+        </div>
+        <ul id="menu-list"></ul>
       </div>
-      <ul id="menu-list"></ul>
+    </div>
+    <div class="menu-footer">
+      <button id="menu-share" class="menu-share" type="button">Copy share link</button>
+      <button id="menu-reset" class="menu-share" type="button">Reset to defaults</button>
     </div>
   </div>
 

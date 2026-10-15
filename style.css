@@ -185,11 +185,25 @@ canvas:active {
   border-top: 1px solid #2a2a2a;
 }
 
-.menu-stickers {
-  display: flex;
-  flex-direction: column;
+.menu-body {
+  overflow-y: auto;
   min-height: 0;
-  flex: 1;
+}
+
+.menu-section summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #ddd;
+  margin-bottom: 4px;
+}
+
+.menu-section[open] summary {
+  margin-bottom: 12px;
+}
+
+.menu-field + .menu-field,
+.menu-field + .menu-check {
+  margin-top: 14px;
 }
 
 .menu-label {
@@ -199,8 +213,116 @@ canvas:active {
   color: #aaa;
 }
 
-#menu-size {
+.menu-field input[type="range"] {
   width: 100%;
+}
+
+.menu-swatches {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-swatch {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid #444;
+  cursor: pointer;
+}
+
+.menu-swatch.active {
+  border-color: #fff;
+}
+
+#menu-bg-custom {
+  margin-left: auto;
+  width: 32px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.menu-drift {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+  opacity: 0.45;
+}
+
+.menu-drift.on {
+  opacity: 1;
+}
+
+.menu-drift .menu-field {
+  flex: 1;
+}
+
+.menu-dir {
+  display: grid;
+  grid-template-columns: repeat(3, 32px);
+  grid-auto-rows: 32px;
+  gap: 4px;
+}
+
+.menu-dir button {
+  background: #333;
+  border: none;
+  color: #ddd;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 15px;
+}
+
+.menu-dir button:hover {
+  background: #555;
+}
+
+.menu-dir button.active {
+  background: #447099;
+  color: #fff;
+}
+
+.menu-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+}
+
+.menu-chip {
+  background: #111;
+  border: 1px solid #333;
+  color: #888;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.menu-chip:hover {
+  color: #fff;
+  border-color: #555;
+}
+
+.menu-chip[aria-pressed="true"] {
+  background: #447099;
+  border-color: #447099;
+  color: #fff;
+}
+
+.menu-chip[aria-pressed="mixed"] {
+  border-color: #447099;
+  color: #ddd;
+}
+
+.menu-chip span {
+  opacity: 0.7;
+  margin-left: 4px;
 }
 
 .menu-actions {
@@ -223,7 +345,7 @@ canvas:active {
 #menu-list {
   list-style: none;
   overflow-y: auto;
-  min-height: 120px;
+  height: 240px;
   border: 1px solid #2a2a2a;
   border-radius: 6px;
 }
@@ -257,8 +379,15 @@ canvas:active {
   cursor: pointer;
 }
 
+.menu-footer {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid #333;
+}
+
 .menu-share {
-  width: 100%;
+  flex: 1;
   background: #333;
   border: none;
   color: #ddd;

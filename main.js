@@ -8,8 +8,27 @@ const SQRT3 = Math.sqrt(3);
 
 // Hex size (center to corner). Adjustable from the settings menu (press M).
 const BASE_R = 80;
-const GAP = 4;
 let R = BASE_R;
+
+const DEFAULTS = {
+  gap: 4, // px between hexes
+  bg: '111111', // background color, hex without the #
+  scroll: 100, // wheel/trackpad speed, %
+  momentum: 75, // 0 turns off the glide after a drag
+  driftDir: 'e',
+  driftSpeed: 20, // px per second
+};
+
+// Drift directions are the way the stickers travel, as unit vectors.
+const D = Math.SQRT1_2;
+const DRIFT_DIRS = {
+  nw: [-D, -D], n: [0, -1], ne: [D, -D],
+  w: [-1, 0], e: [1, 0],
+  sw: [-D, D], s: [0, 1], se: [D, D],
+};
+const DRIFT_ARROWS = { nw: '↖', n: '↑', ne: '↗', w: '←', e: '→', sw: '↙', s: '↓', se: '↘' };
+
+const BG_SWATCHES = ['111111', '000000', '404041', '447099', 'ffffff'];
 
 // Pointy-top hex spacing
 let colW = R * Math.sqrt(3);
@@ -18,13 +37,33 @@ let rowH = R * 1.5;
 // Settings are mirrored into the URL's query string, which is read back here on
 // load. That makes the address bar itself the share link:
 //   ?size=150&unique=1&off=air,ark   (or on=a,b,c when that's shorter)
+// Other keys: gap, bg, scroll, momentum, drift (a direction) and dspeed.
 let sizeScale = 1;
+let gap = DEFAULTS.gap;
+let bg = DEFAULTS.bg;
+let scrollPct = DEFAULTS.scroll;
+let momentum = DEFAULTS.momentum;
+let driftOn = false;
+let driftDir = DEFAULTS.driftDir;
+let driftSpeed = DEFAULTS.driftSpeed;
 let disabled = new Set(); // package names hidden from the grid
 let uniqueMode = false; // each sticker once, black everywhere else
 {
   const q = new URLSearchParams(location.search);
-  const size = Number(q.get('size')) / 100;
-  if (size >= 0.4 && size <= 2.5) sizeScale = size;
+  const num = (key, lo, hi, fallback) => {
+    const v = Number(q.get(key));
+    return q.has(key) && v >= lo && v <= hi ? Math.round(v) : fallback;
+  };
+  sizeScale = num('size', 40, 250, 100) / 100;
+  gap = num('gap', 0, 24, gap);
+  scrollPct = num('scroll', 25, 300, scrollPct);
+  momentum = num('momentum', 0, 95, momentum);
+  driftSpeed = num('dspeed', 5, 100, driftSpeed);
+  if (/^[0-9a-f]{6}$/i.test(q.get('bg') || '')) bg = q.get('bg').toLowerCase();
+  if (Object.hasOwn(DRIFT_DIRS, q.get('drift'))) {
+    driftOn = true;
+    driftDir = q.get('drift');
+  }
   uniqueMode = q.get('unique') === '1';
   const list = key => (q.get(key) || '').split(',').filter(Boolean);
   if (q.has('on')) {
@@ -38,6 +77,14 @@ let uniqueMode = false; // each sticker once, black everywhere else
 function shareURL() {
   const q = new URLSearchParams();
   if (sizeScale !== 1) q.set('size', Math.round(sizeScale * 100));
+  if (gap !== DEFAULTS.gap) q.set('gap', gap);
+  if (bg !== DEFAULTS.bg) q.set('bg', bg);
+  if (scrollPct !== DEFAULTS.scroll) q.set('scroll', scrollPct);
+  if (momentum !== DEFAULTS.momentum) q.set('momentum', momentum);
+  if (driftOn) {
+    q.set('drift', driftDir);
+    if (driftSpeed !== DEFAULTS.driftSpeed) q.set('dspeed', driftSpeed);
+  }
   if (uniqueMode) q.set('unique', '1');
   const off = packages.map(p => p.name).filter(n => disabled.has(n));
   const on = packages.map(p => p.name).filter(n => !disabled.has(n));
@@ -55,6 +102,7 @@ function shareURL() {
 R = BASE_R * sizeScale;
 colW = R * Math.sqrt(3);
 rowH = R * 1.5;
+document.body.style.background = `#${bg}`;
 
 let sources = []; // decoded <img> elements, kept so bitmaps can be rebuilt at a new size
 let images = [];
@@ -87,7 +135,7 @@ let hoverAnimRaf = null;
 function toBitmap(img) {
   if (!img) return Promise.resolve(null);
   const dpr = window.devicePixelRatio || 1;
-  const r = R - GAP;
+  const r = R - gap;
   return createImageBitmap(img, {
     resizeWidth: Math.round(r * Math.sqrt(3) * dpr),
     resizeHeight: Math.round(r * 2 * dpr),
@@ -195,7 +243,7 @@ function hexCenter(col, row) {
 }
 
 function hexPath(cx, cy) {
-  const r = R - GAP;
+  const r = R - gap;
   ctx.beginPath();
   for (let i = 0; i < 6; i++) {
     const angle = Math.PI / 180 * (60 * i - 30); // pointy-top
@@ -227,7 +275,7 @@ function cellAtPoint(mx, my) {
 
 function drawHex(cx, cy, img, scale) {
   if (!img) return; // sticker failed to load; leave the cell empty
-  const r = R - GAP;
+  const r = R - gap;
   ctx.save();
   if (scale !== 1.0) {
     ctx.translate(cx, cy);
@@ -289,15 +337,45 @@ function startHoverAnim() {
 
 // --- Momentum animation ---
 
+// Per-frame velocity decay. Momentum 0 stops dead; 95 glides the longest.
+function friction() {
+  return momentum === 0 ? 0 : 0.8 + momentum * 0.002;
+}
+
 function animateMomentum() {
-  velX *= 0.95;
-  velY *= 0.95;
+  velX *= friction();
+  velY *= friction();
   panX += velX;
   panY += velY;
   render();
   if (Math.abs(velX) > 0.2 || Math.abs(velY) > 0.2) {
     rafId = requestAnimationFrame(animateMomentum);
   }
+}
+
+// --- Auto drift ---
+
+let driftRaf = null;
+let driftLast = 0;
+
+function driftTick(t) {
+  driftRaf = requestAnimationFrame(driftTick);
+  const dt = Math.min((t - driftLast) / 1000, 0.1); // a hidden tab shouldn't cause a jump
+  driftLast = t;
+  if (dragging) return;
+  const [dx, dy] = DRIFT_DIRS[driftDir];
+  panX += dx * driftSpeed * dt;
+  panY += dy * driftSpeed * dt;
+  if (mouseX !== null) updateHover(mouseX, mouseY);
+  render();
+}
+
+function updateDrift() {
+  cancelAnimationFrame(driftRaf);
+  driftRaf = null;
+  if (!driftOn) return;
+  driftLast = performance.now();
+  driftRaf = requestAnimationFrame(driftTick);
 }
 
 // --- Scroll ---
@@ -307,8 +385,8 @@ let wheelRafPending = false;
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
   cancelAnimationFrame(rafId);
-  panX -= e.deltaX * 0.5;
-  panY -= e.deltaY * 0.5;
+  panX -= e.deltaX * scrollPct / 200;
+  panY -= e.deltaY * scrollPct / 200;
   if (!wheelRafPending) {
     wheelRafPending = true;
     requestAnimationFrame(() => {
@@ -333,8 +411,12 @@ canvas.addEventListener('pointerdown', e => {
   canvas.setPointerCapture(e.pointerId);
 });
 
-canvas.addEventListener('mousemove', e => {
-  const cell = cellAtPoint(e.clientX, e.clientY);
+// Last known cursor position, so hover can follow a drifting grid.
+let mouseX = null;
+let mouseY = null;
+
+function updateHover(x, y) {
+  const cell = cellAtPoint(x, y);
   const filled = cell && imageIndexForCell(cell.col, cell.row) >= 0;
   const col = filled ? cell.col : null;
   const row = filled ? cell.row : null;
@@ -345,9 +427,16 @@ canvas.addEventListener('mousemove', e => {
     canvas.style.cursor = col !== null ? 'pointer' : 'grab';
     startHoverAnim();
   }
+}
+
+canvas.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  updateHover(mouseX, mouseY);
 });
 
 canvas.addEventListener('mouseleave', () => {
+  mouseX = mouseY = null;
   hoverCol = null;
   hoverRow = null;
   startHoverAnim();
@@ -436,8 +525,6 @@ function syncURL() {
 // --- Settings menu (toggled with M; deliberately not advertised in the UI) ---
 
 const menu = document.getElementById('menu');
-const sizeSlider = document.getElementById('menu-size');
-const sizeValue = document.getElementById('menu-size-value');
 const menuSearch = document.getElementById('menu-search');
 const menuList = document.getElementById('menu-list');
 const menuCount = document.getElementById('menu-count');
@@ -477,8 +564,36 @@ function setSize(scale) {
   hoverScale = 1.0;
   render();
   syncURL();
-  clearTimeout(setSize.timer);
-  setSize.timer = setTimeout(rebuildBitmaps, 150);
+  scheduleRebuild();
+}
+
+// Bitmaps are sized to the hex, so a new size or gap needs fresh ones.
+let rebuildTimer = null;
+function scheduleRebuild() {
+  clearTimeout(rebuildTimer);
+  rebuildTimer = setTimeout(rebuildBitmaps, 150);
+}
+
+function setGap(px) {
+  gap = px;
+  hoverCol = hoverRow = activeCol = activeRow = null;
+  hoverScale = 1.0;
+  render();
+  syncURL();
+  scheduleRebuild();
+}
+
+function setBg(hex) {
+  bg = hex;
+  document.body.style.background = `#${bg}`;
+  syncURL();
+}
+
+function setDrift(on, dir = driftDir) {
+  driftOn = on;
+  driftDir = dir;
+  updateDrift();
+  syncURL();
 }
 
 function setUniqueMode(on) {
@@ -495,9 +610,47 @@ function setEnabled(names, on) {
   for (const n of names) on ? disabled.delete(n) : disabled.add(n);
   updateEnabled();
   activeCol = activeRow = hoverCol = hoverRow = null;
-  updateCount();
+  syncStickerControls();
   syncURL();
   render();
+}
+
+// Checkboxes and group chips both reflect `disabled`, so refresh them together.
+const menuBoxes = new Map(); // package name -> checkbox
+const groupChips = []; // { chip, countEl, names }
+
+function syncStickerControls() {
+  updateCount();
+  for (const [name, box] of menuBoxes) box.checked = !disabled.has(name);
+  for (const { chip, countEl, names } of groupChips) {
+    const on = names.filter(n => !disabled.has(n)).length;
+    chip.setAttribute('aria-pressed', on === names.length ? 'true' : on === 0 ? 'false' : 'mixed');
+    countEl.textContent = `${on}/${names.length}`;
+  }
+}
+
+function buildGroups() {
+  const byGroup = new Map();
+  for (const p of packages) {
+    const g = p.group || 'Other';
+    if (!byGroup.has(g)) byGroup.set(g, []);
+    byGroup.get(g).push(p.name);
+  }
+  if (byGroup.size < 2) return;
+  // Biggest first, with the catch-all last.
+  const groups = [...byGroup].sort(([an, a], [bn, b]) =>
+    (an === 'Other') - (bn === 'Other') || b.length - a.length || an.localeCompare(bn));
+  for (const [group, names] of groups) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'menu-chip';
+    const countEl = document.createElement('span');
+    chip.append(group, countEl);
+    // A fully shown group switches off; anything less switches it all on.
+    chip.addEventListener('click', () => setEnabled(names, names.some(n => disabled.has(n))));
+    document.getElementById('menu-groups').append(chip);
+    groupChips.push({ chip, countEl, names });
+  }
 }
 
 function buildMenuList() {
@@ -508,8 +661,8 @@ function buildMenuList() {
     const label = document.createElement('label');
     const box = document.createElement('input');
     box.type = 'checkbox';
-    box.checked = !disabled.has(pkg.name);
     box.addEventListener('change', () => setEnabled([pkg.name], box.checked));
+    menuBoxes.set(pkg.name, box);
     const img = document.createElement('img');
     img.src = pkg.path;
     img.loading = 'lazy';
@@ -520,28 +673,98 @@ function buildMenuList() {
     li.append(label);
     menuList.append(li);
   }
-  updateCount();
 }
 
 function setAllVisible(on) {
   const names = [...menuList.children].filter(li => !li.hidden).map(li => li.dataset.name);
-  for (const li of menuList.children) {
-    if (!li.hidden) li.querySelector('input').checked = on;
-  }
   setEnabled(names, on);
 }
 
 const uniqueBox = document.getElementById('menu-unique');
-uniqueBox.checked = uniqueMode;
 uniqueBox.addEventListener('change', () => setUniqueMode(uniqueBox.checked));
 
-sizeSlider.value = Math.round(sizeScale * 100);
-sizeValue.textContent = `${sizeSlider.value}%`;
-sizeSlider.addEventListener('input', () => {
-  sizeValue.textContent = `${sizeSlider.value}%`;
-  setSize(sizeSlider.value / 100);
+// Each slider reads its value from state, so syncControls can redraw them all.
+const sliders = [
+  { id: 'size', get: () => Math.round(sizeScale * 100), set: v => setSize(v / 100), fmt: v => `${v}%` },
+  { id: 'gap', get: () => gap, set: setGap, fmt: v => `${v}px` },
+  { id: 'scroll', get: () => scrollPct, set: v => { scrollPct = v; syncURL(); }, fmt: v => `${v}%` },
+  { id: 'momentum', get: () => momentum, set: v => { momentum = v; syncURL(); }, fmt: v => (v === 0 ? 'Off' : v) },
+  { id: 'dspeed', get: () => driftSpeed, set: v => { driftSpeed = v; syncURL(); }, fmt: v => `${v} px/s` },
+];
+for (const s of sliders) {
+  s.el = document.getElementById(`menu-${s.id}`);
+  s.valueEl = document.getElementById(`menu-${s.id}-value`);
+  s.el.addEventListener('input', () => {
+    s.set(Number(s.el.value));
+    s.valueEl.textContent = s.fmt(s.get());
+  });
+}
+
+const swatchesEl = document.getElementById('menu-swatches');
+const bgCustom = document.getElementById('menu-bg-custom');
+const swatches = BG_SWATCHES.map(hex => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'menu-swatch';
+  b.style.background = `#${hex}`;
+  b.setAttribute('aria-label', `Background #${hex}`);
+  b.addEventListener('click', () => { setBg(hex); syncControls(); });
+  swatchesEl.insertBefore(b, bgCustom);
+  return { hex, el: b };
 });
+bgCustom.addEventListener('input', () => { setBg(bgCustom.value.slice(1)); syncControls(); });
+
+const driftBox = document.getElementById('menu-drift');
+const driftPanel = document.querySelector('.menu-drift');
+const dirButtons = {};
+for (const dir of ['nw', 'n', 'ne', 'w', null, 'e', 'sw', 's', 'se']) {
+  const holder = dir ? document.createElement('button') : document.createElement('span');
+  if (dir) {
+    holder.type = 'button';
+    holder.textContent = DRIFT_ARROWS[dir];
+    holder.setAttribute('role', 'radio');
+    holder.setAttribute('aria-label', `Drift ${dir.toUpperCase()}`);
+    // Picking a direction is a clear sign you want drifting, so turn it on.
+    holder.addEventListener('click', () => { setDrift(true, dir); syncControls(); });
+    dirButtons[dir] = holder;
+  }
+  document.getElementById('menu-dir').append(holder);
+}
+driftBox.addEventListener('change', () => { setDrift(driftBox.checked); syncControls(); });
+
+function syncControls() {
+  for (const s of sliders) {
+    s.el.value = s.get();
+    s.valueEl.textContent = s.fmt(s.get());
+  }
+  for (const { hex, el } of swatches) el.classList.toggle('active', hex === bg);
+  bgCustom.value = `#${bg}`;
+  driftBox.checked = driftOn;
+  driftPanel.classList.toggle('on', driftOn);
+  for (const [dir, el] of Object.entries(dirButtons)) {
+    el.classList.toggle('active', dir === driftDir);
+    el.setAttribute('aria-checked', dir === driftDir);
+  }
+  uniqueBox.checked = uniqueMode;
+  syncStickerControls();
+}
+
+function resetDefaults() {
+  setSize(1);
+  setGap(DEFAULTS.gap);
+  setBg(DEFAULTS.bg);
+  scrollPct = DEFAULTS.scroll;
+  momentum = DEFAULTS.momentum;
+  driftSpeed = DEFAULTS.driftSpeed;
+  setDrift(false, DEFAULTS.driftDir);
+  setUniqueMode(false);
+  setEnabled(packages.map(p => p.name), true);
+  menuSearch.value = '';
+  applyFilter();
+  syncControls();
+}
 menuSearch.addEventListener('input', applyFilter);
+document.getElementById('menu-reset').addEventListener('click', resetDefaults);
 const shareBtn = document.getElementById('menu-share');
 shareBtn.addEventListener('click', async () => {
   const url = shareURL();
@@ -561,6 +784,9 @@ document.getElementById('menu-all').addEventListener('click', () => setAllVisibl
 document.getElementById('menu-none').addEventListener('click', () => setAllVisible(false));
 document.getElementById('menu-close').addEventListener('click', () => toggleMenu(false));
 buildMenuList();
+buildGroups();
+syncControls();
+updateDrift();
 
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {

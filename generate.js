@@ -65,6 +65,55 @@ const OVERRIDES = {
   tabby: 'https://tabby.tidymodels.org',
 };
 
+// Menu groups, for toggling whole families of stickers at once. Anything not
+// listed here lands in "Other" and is reported, so new upstream stickers are easy
+// to spot and file.
+const GROUPS = {
+  'Tidyverse': [
+    'tidyverse', 'ggplot2', 'dplyr', 'tidyr', 'readr', 'purrr', 'tibble', 'stringr',
+    'forcats', 'lubridate', 'hms', 'readxl', 'haven', 'rvest', 'glue', 'broom',
+    'dbplyr', 'dtplyr', 'duckplyr', 'googledrive', 'googlesheets', 'googlesheets4',
+    'modelr', 'reprex', 'pipe', 'httr2', 'scales', 'vctrs', 'rlang', 'clock', 'furrr',
+  ],
+  'Tidymodels': [
+    'tidymodels', 'parsnip', 'recipes', 'rsample', 'tune', 'yardstick', 'workflows',
+    'workflowsets', 'dials', 'agua', 'applicable', 'baguette', 'bonsai', 'brulee',
+    'butcher', 'censored', 'corrr', 'discrim', 'embed', 'finetune', 'hardhat', 'infer',
+    'important', 'filtro', 'lorax', 'multilevelmod', 'orbital', 'plsmod', 'poissonreg',
+    'probably', 'rules', 'spatialsample', 'stacks', 'tidyclust', 'tidyposterior',
+    'tidypredict', 'textrecipes', 'themis', 'sparsevctrs', 'tabby',
+  ],
+  'Shiny & web': [
+    'shiny', 'bslib', 'htmltools', 'sass', 'plumber', 'plumber2', 'plumbertableau',
+    'promises', 'mirai', 'reactlog', 'shinytest2', 'shinychat', 'shinyreact', 'sortable',
+    'flexdashboard', 'chromote', 'webr', 'rwasm', 'r2d3', 'rapp',
+  ],
+  'Docs & publishing': [
+    'quarto', 'rmarkdown', 'knitr', 'bookdown', 'blogdown', 'distill', 'pagedown',
+    'xaringan', 'rticles', 'pkgdown', 'blastula',
+  ],
+  'Tables & graphics': [
+    'gt', 'great_tables', 'pointblank', 'plotnine', 'gganimate', 'patchwork', 'ragg',
+    'svglite', 'systemfonts', 'farver', 'marquee', 'gtable', 'ggsql',
+  ],
+  'Developer tools': [
+    'devtools', 'usethis', 'testthat', 'roxygen2', 'lintr', 'covr', 'renv', 'R6',
+    'rstudioapi', 'air', 'ark', 'positron', 'RStudio', 'miniCRAN', 'quickr', 'debrief',
+    'rray', 'siuba', 'rrd', 'yaml12', 'lobstr', 'sloop', 'withr', 'fs',
+  ],
+  'AI & LLMs': [
+    'ellmer', 'chatlas', 'chattr', 'mall', 'ragnar', 'raghilda', 'btw', 'querychat',
+  ],
+  'Data & deployment': [
+    'odbc', 'connections', 'pins', 'vetiver', 'connectapi', 'rsconnect', 'dbplot',
+    'modeldb', 'feather', 'sparklyr',
+  ],
+  'Deep learning': ['reticulate', 'keras3', 'tensorflow', 'torch', 'luz'],
+};
+const GROUP_OF = new Map(
+  Object.entries(GROUPS).flatMap(([group, names]) => names.map(n => [n, group]))
+);
+
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes('--dry-run');
 const REFRESH_URLS = args.includes('--refresh-urls');
@@ -245,8 +294,15 @@ async function main() {
   const packages = await mapLimit(keep, CONCURRENCY, async name => {
     const image = await buildImage(name);
     if (image.built) built++;
-    return { name, path: image.path, url: urlFor.get(name) };
+    return {
+      name,
+      path: image.path,
+      url: urlFor.get(name),
+      group: GROUP_OF.get(name) || 'Other',
+    };
   });
+  const ungrouped = keep.filter(n => !GROUP_OF.has(n));
+  const unknown = [...GROUP_OF.keys()].filter(n => !keep.includes(n));
 
   const added = keep.filter(n => !existing.has(n));
   const removed = [...existing.keys()].filter(n => !keep.includes(n));
@@ -269,6 +325,8 @@ async function main() {
   if (added.length) console.log(`added:   ${added.join(', ')}`);
   if (removed.length) console.log(`dropped: ${removed.join(', ')}`);
   if (stale.length) console.log(`removed ${stale.length} stale file(s) from images/`);
+  if (ungrouped.length) console.log(`no group (shown as "Other"): ${ungrouped.join(', ')}`);
+  if (unknown.length) console.log(`in GROUPS but not in the grid: ${unknown.join(', ')}`);
   if (unresolved.length) {
     console.log(`\nno URL found (omitted — add to OVERRIDES to include):`);
     console.log(`  ${unresolved.join(', ')}`);
