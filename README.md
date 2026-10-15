@@ -35,6 +35,16 @@ Anything in `images/` that isn't in the manifest is deleted as stale, so don't p
 
 If a sticker has no resolvable URL, it's reported and omitted from the grid. Add an entry to `OVERRIDES` in `generate.js` to include it.
 
+## Social card
+
+`social-card.png` is the 1200×630 link preview referenced by the `og:image` and `twitter:image` tags in `index.html`. Rebuild it after the sticker set changes with:
+
+```sh
+node social-card.js
+```
+
+Needs ImageMagick (`magick`). The tags use absolute URLs on GitHub Pages, so update them if the site moves.
+
 ## File structure
 
 ```
@@ -43,6 +53,8 @@ hex-grid/
 ├── style.css         # full-screen canvas, dark background, panel styles
 ├── main.js           # canvas rendering, pan/hover/click/panel logic
 ├── generate.js       # rebuilds images/ and packages.js from rstudio/hex-stickers
+├── social-card.js    # builds social-card.png from the stickers in images/
+├── social-card.png   # 1200×630 link preview image (og:image)
 ├── packages.js       # JS global PACKAGES — generated, do not edit by hand
 ├── images/           # generated 600×693 WebP stickers (tidyverse.webp used as favicon)
 └── .cache/           # gitignored full-size upstream PNGs, so re-runs skip the download
